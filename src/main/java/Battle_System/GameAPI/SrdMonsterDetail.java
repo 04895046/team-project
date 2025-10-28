@@ -1,9 +1,11 @@
 package Battle_System.GameAPI;
 
+import Battle_System.User.Spells;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -16,7 +18,7 @@ public class SrdMonsterDetail implements MonsterDetail {
      * @throws MonsterNotFoundException throws the exception if nothing is founded
      */
     @Override
-    public HashMap<String,String> getAllResourcesURL() throws MonsterNotFoundException {
+    public HashMap<String,String> getAllResourcesURL() {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("text/plain");
@@ -38,20 +40,19 @@ public class SrdMonsterDetail implements MonsterDetail {
     }
 
     /**
-     * this method will get the HashMap for spells, where the keys are name of the spells and the values are the dmg
-     * @return a HashMap, the keys are "spells" and "races", the values are the corresponding urls
+     * this method will get the ArrayList for spells
+     * @return a ArrayList
      * @throws MonsterNotFoundException throws the exception if nothing is founded
      */
     @Override
-    public HashMap<String,Integer> generateSpells() throws MonsterNotFoundException {
+    public ArrayList<Spells> generateSpells() {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
-        MediaType mediaType = MediaType.parse("text/plain");
         Request request = new Request.Builder()
                 .url(String.format("https://www.dnd5eapi.co%s",getAllResourcesURL().get("spells")))
                 .addHeader("Accept", "application/json")
                 .build();
-        HashMap<String, Integer> map = new HashMap<>();
+        ArrayList<Spells> theSpell = new ArrayList<Spells>();
         try {
             final Response response = client.newCall(request).execute();
             final JSONObject responseBody = new JSONObject(response.body().string());
@@ -60,12 +61,12 @@ public class SrdMonsterDetail implements MonsterDetail {
                 JSONObject spell = results.getJSONObject(i);
                 String name = spell.getString("name");
                 int dmg = spell.getInt("level");
-                map.put(name, dmg);
+                theSpell.add(new Spells(name, dmg));
             }
         } catch (Exception e) {
             throw new MonsterNotFoundException();
         }
-        return map;
+        return theSpell;
     }
 
     /**
@@ -73,7 +74,7 @@ public class SrdMonsterDetail implements MonsterDetail {
      * @throws MonsterNotFoundException throws the exception if nothing is founded
      */
     @Override
-    public String[] generateRaces() throws MonsterNotFoundException {
+    public String[] generateRaces() {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("text/plain");

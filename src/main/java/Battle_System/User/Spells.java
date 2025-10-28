@@ -1,0 +1,19 @@
+package Battle_System.User;
+
+import java.util.HashMap;
+
+
+public class Spells {
+    private String spellName;
+    private int DMG;
+
+    /**
+     * This DamageType class contains the type of the damage, the description of the damage type, the 2-3 skills that
+     * this monster has, and the map contains those skills and corresponding dmg
+     */
+    public Spells(String spellName, int DMG) {
+        this.spellName = spellName;
+        this.DMG = DMG;
+    }
+
+}

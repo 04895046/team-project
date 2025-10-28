@@ -1,5 +1,8 @@
 package Battle_System.GameAPI;
 
+import Battle_System.User.Spells;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface MonsterDetail {
@@ -13,7 +16,7 @@ public interface MonsterDetail {
      * this method will get the HashMap for spells, where the keys are name of the spells and the values are the dmg
      * @throws MonsterNotFoundException throws the exception if nothing is founded
      */
-    HashMap<String,Integer> generateSpells() throws MonsterNotFoundException;
+    ArrayList<Spells> generateSpells() throws MonsterNotFoundException;
 
     /**
      * this method will get an Array for races
@@ -22,7 +25,7 @@ public interface MonsterDetail {
     String[] generateRaces() throws MonsterNotFoundException;
 
 
-    class MonsterNotFoundException extends Exception {
+    class MonsterNotFoundException extends RuntimeException {
         public MonsterNotFoundException() {
             super("Monster not found");
         }
