@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 
 public class Spells {
-    private String spellName;
-    private int DMG;
+    private final String spellName;
+    private final int DMG;
 
     /**
      * This DamageType class contains the type of the damage, the description of the damage type, the 2-3 skills that
@@ -14,6 +14,13 @@ public class Spells {
     public Spells(String spellName, int DMG) {
         this.spellName = spellName;
         this.DMG = DMG;
+    }
+
+    public String getSpellName() {
+        return spellName;
+    }
+    public int getDMG() {
+        return DMG;
     }
 
 }

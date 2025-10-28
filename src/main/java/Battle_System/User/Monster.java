@@ -13,8 +13,8 @@ public class Monster {
     //2. As a user I want that when I pass through the same area again, the monsters I’ve already defeated will not reappear.
     //3. As a user I want those monsters have name, atk, hp, and damage type
     public String NAME;
-    private static int HP;
-    private static int SPD;
+    private int HP;
+    private final int SPD;
     private Spells[] SPELL;
 
     public Monster() throws MonsterDetail.MonsterNotFoundException {
@@ -27,6 +27,20 @@ public class Monster {
         setNAME(api);
 
     }
+    // Getters and Setters
+    public int getHP() {
+        return HP;
+    }
+
+    public int getSPD() {
+        return SPD;
+    }
+
+    public Spells[] getSpells() {
+        return SPELL;
+    }
+
+    public void HPDecrease(int DMG){HP -= DMG;}
 
     public void setNAME(SrdMonsterDetail api) {
         Random random = new Random();
@@ -48,6 +62,12 @@ public class Monster {
         }
     }
 
-
+    public int attack(){
+        Random random = new Random();
+        int size = SPELL.length;
+        int index = random.nextInt(size);
+        Spells spell = SPELL[index];
+        return spell.getDMG();
+    }
 
 }
