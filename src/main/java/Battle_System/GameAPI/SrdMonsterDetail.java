@@ -1,6 +1,6 @@
 package Battle_System.GameAPI;
 
-import Battle_System.User.Spells;
+import Battle_System.Entity.Spells;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;

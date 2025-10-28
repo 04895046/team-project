@@ -1,4 +1,4 @@
-package Battle_System.User;
+package Battle_System.Entity;
 
 import Battle_System.GameAPI.MonsterDetail;
 import Battle_System.GameAPI.SrdMonsterDetail;
@@ -17,7 +17,7 @@ public class Monster {
     private final int SPD;
     private Spells[] SPELL;
 
-    public Monster() throws MonsterDetail.MonsterNotFoundException {
+    public Monster() {
         Random random = new Random();
         HP = random.nextInt(11) + 20;
         SPD = random.nextInt(11) + 20;
@@ -25,8 +25,8 @@ public class Monster {
         SrdMonsterDetail api = new SrdMonsterDetail();
         setSpells(api);
         setNAME(api);
-
     }
+
     // Getters and Setters
     public int getHP() {
         return HP;
@@ -40,7 +40,10 @@ public class Monster {
         return SPELL;
     }
 
-    public void HPDecrease(int DMG){HP -= DMG;}
+    public void HPDecrease(int DMG){
+        HP -= DMG;
+        if (HP < 0) HP = 0;
+    }
 
     public void setNAME(SrdMonsterDetail api) {
         Random random = new Random();
@@ -62,12 +65,18 @@ public class Monster {
         }
     }
 
-    public int attack(){
+    public Spells chooseSpell(){
         Random random = new Random();
         int size = SPELL.length;
         int index = random.nextInt(size);
-        Spells spell = SPELL[index];
+        return SPELL[index];
+    }
+
+    public int attack(Spells spell) {
         return spell.getDMG();
     }
 
+    public boolean isAlive() {
+        return HP > 0;
+    }
 }

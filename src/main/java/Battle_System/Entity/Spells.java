@@ -1,6 +1,4 @@
-package Battle_System.User;
-
-import java.util.HashMap;
+package Battle_System.Entity;
 
 
 public class Spells {
