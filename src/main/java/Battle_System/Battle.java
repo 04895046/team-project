@@ -30,8 +30,16 @@ public class Battle {
         monster.HPDecrease(DMG);
     }
 
-    public void startBattle(Monster m1, Monster m2) {
-
+    public void startBattle() {
+        while (user.isAlive() && monster.isAlive()) {
+                UserTurn();
+                if (monster.isAlive()) {
+                    break;
+                }
+                MonsterTurn();
+        }
+        // TODO: if the monster is dead then we need to delete it from map and move it to the defeated monster list.
+        //  If the user is dead, then we go to the recent saved place.
     }
 
 }

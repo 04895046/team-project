@@ -11,21 +11,15 @@ public class User {
     public String NAME;
     private int HP;
     private int DMG = 8;
-    private final int SPD;
 
     public User() {
         Random random = new Random();
         HP = random.nextInt(11) + 20;
-        SPD = random.nextInt(11) + 20;
     }
 
     // Getters and Setters
     public int getHP() {
         return HP;
-    }
-
-    public int getSPD() {
-        return SPD;
     }
 
     public int getDMG() {

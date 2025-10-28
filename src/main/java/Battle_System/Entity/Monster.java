@@ -14,13 +14,11 @@ public class Monster {
     //3. As a user I want those monsters have name, atk, hp, and damage type
     public String NAME;
     private int HP;
-    private final int SPD;
     private Spells[] SPELL;
 
     public Monster() {
         Random random = new Random();
         HP = random.nextInt(11) + 20;
-        SPD = random.nextInt(11) + 20;
 
         SrdMonsterDetail api = new SrdMonsterDetail();
         setSpells(api);
@@ -30,10 +28,6 @@ public class Monster {
     // Getters and Setters
     public int getHP() {
         return HP;
-    }
-
-    public int getSPD() {
-        return SPD;
     }
 
     public Spells[] getSpells() {
