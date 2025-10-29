@@ -24,12 +24,12 @@ public class Battle {
 
     private void MonsterTurn() {
         Spells spell = monster.chooseSpell();
-        int DMG = monster.attack(spell);
+        double DMG = monster.attack(spell);
         user.HPDecrease(DMG);
     }
 
     private void UserTurn() {
-        int DMG = user.attack();
+        double DMG = user.attack();
         monster.HPDecrease(DMG);
     }
 

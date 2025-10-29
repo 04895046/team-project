@@ -13,7 +13,7 @@ public class Monster {
     //2. As a user I want that when I pass through the same area again, the monsters I’ve already defeated will not reappear.
     //3. As a user I want those monsters have name, atk, hp, and damage type
     public String NAME;
-    private int HP;
+    private double HP;
     private Spells[] SPELL;
 
     public Monster() {
@@ -26,7 +26,7 @@ public class Monster {
     }
 
     // Getters and Setters
-    public int getHP() {
+    public double getHP() {
         return HP;
     }
 
@@ -34,7 +34,7 @@ public class Monster {
         return SPELL;
     }
 
-    public void HPDecrease(int DMG){
+    public void HPDecrease(double DMG){
         HP -= DMG;
         if (HP < 0) HP = 0;
     }
@@ -49,7 +49,7 @@ public class Monster {
 
     public void setSpells(SrdMonsterDetail api) {
         Random random = new Random();
-        int size = random.nextInt(4);
+        int size = random.nextInt(3) + 1;
         ArrayList<Spells> spell = api.generateSpells();
         int spellListSize = spell.size();
         SPELL = new Spells[size];
@@ -66,7 +66,7 @@ public class Monster {
         return SPELL[index];
     }
 
-    public int attack(Spells spell) {
+    public double attack(Spells spell) {
         return spell.getDMG();
     }
 

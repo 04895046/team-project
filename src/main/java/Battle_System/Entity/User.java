@@ -9,9 +9,9 @@ public class User {
     //2. As a user I want to be able to initiate a battle so that I can attack my opponent/monster or choose flee to aviod the fight.
     //3. As a user I want to be able to access my inventory so that I can equip or use items.
     public String NAME;
-    private int HP;
-    private int DMG = 8;
-    private int DEF = 0;
+    private double HP;
+    private double DMG = 8;
+    private double DEF = 0;
 
     public User() {
         Random random = new Random();
@@ -19,11 +19,11 @@ public class User {
     }
 
     // Getters and Setters
-    public int getHP() {
+    public double getHP() {
         return HP;
     }
 
-    public int getDMG() {
+    public double getDMG() {
         return DMG;
     }
 
@@ -31,28 +31,28 @@ public class User {
         return HP > 0;
     }
 
-    public void HPDecrease(int DMG){
-        HP -= DMG;
+    public void HPDecrease(double DMG){
+        HP -= DMG * (1 - 0.2 * this.getDEF());
         if (HP < 0) HP = 0;
     }
 
-    public void addDMG(int dmg){
+    public void addDMG(double dmg){
         DMG += dmg;
     }
 
-    public void decreaseDMG(int dmg){
+    public void decreaseDMG(double dmg){
         DMG -= dmg;
     }
 
-    public int getDEF() {
+    public double getDEF() {
         return DEF;
     }
 
-    public void addDEF(int def){
+    public void addDEF(double def){
         DEF += def;
     }
 
-    public void decreaseDEF(int def){
+    public void decreaseDEF(double def){
         DEF -= def;
     }
 
@@ -61,7 +61,7 @@ public class User {
         // TODO : answer the quiz correctly then return true in this method
     }
 
-    public int attack(){
+    public double attack(){
         if(SuccessAttack()){
             return getDMG();
         }
