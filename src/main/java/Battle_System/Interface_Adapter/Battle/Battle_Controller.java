@@ -1,0 +1,20 @@
+package Battle_System.Interface_Adapter.Battle;
+
+import Battle_System.Entity.Monster;
+import Battle_System.Entity.User;
+import Battle_System.UseCase.Battle.Battle_InputBoundary;
+import Battle_System.UseCase.Battle.Battle_InputData;
+
+public class Battle_Controller {
+    private final Battle_InputBoundary battleUseCaseInteractor;
+
+
+    public Battle_Controller(Battle_InputBoundary battleUseCaseInteractor) {
+        this.battleUseCaseInteractor = battleUseCaseInteractor;
+    }
+
+    public void execute(User user, Monster monster){
+        final Battle_InputData battleInputData= new Battle_InputData(user, monster);
+        battleUseCaseInteractor.execute(battleInputData);
+    }
+}

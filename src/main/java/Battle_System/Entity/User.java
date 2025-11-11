@@ -22,6 +22,12 @@ public class User {
         HP = random.nextInt(11) + 20;
     }
 
+    // TODO: finish the override
+    @Override
+    public String toString() {
+        return null;
+    }
+
     /**
      * The getter for HP.
      */
@@ -65,7 +71,7 @@ public class User {
      * affect the bonus HP, if the damage is high, then it will decrease the HP.
      */
     public void HPDecrease(double dmg){
-        double damage = dmg * (1 - 0.2 * getDEF());
+        double damage = dmg * (1 - 0.08 * getDEF());
         double leftDamage = bonusHPDecrease(damage);
         HP -= leftDamage;
         if (HP < 0) HP = 0;
@@ -115,13 +121,5 @@ public class User {
         else{
             return 0;
         }
-    }
-
-    /**
-     * Ask the user to answer a quiz if they answered correctly then the user successfully flee.
-     */
-    public Boolean successFlee(){
-        return null;
-        // TODO : answer the quiz correctly then return true in this method
     }
 }

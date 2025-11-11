@@ -53,31 +53,14 @@ public class Battle {
                 MonsterTurn();
         }
         // TODO: if the monster is dead then we need to delete it from map and move it to the defeated monster list.
-        //  If the user is dead, then we go to the recent saved place.
-    }
-
-    /**
-     * Ask the user to answer a quiz by calling the successFlee inside the user class. If the user answered the quiz
-     * correctly then the user flee and exit the battle system. If not, then the user will force to enter the fight.
-     */
-    public void flee(){
-        if(! user.successFlee()){
-            fight();
-        }
+        //  If the user is dead, then we go to the recent saved data.
     }
 
     /**
      * This is the final method that would be called in ca, if the user choose "FIGHT" then this method will lead to the
-     * fight method. If the use choose "FLEE" then it will call flee() and then call the successFlee which asked the
-     * user to answer a quiz.
+     * fight method.
      */
-    public void execute(String input){
-        if(input.equals("FLEE")){
-            flee();
-        }
-        else if(input.equals("FIGHT")){
+    public void execute(){
             fight();
-        }
     }
-
 }

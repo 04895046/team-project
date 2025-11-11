@@ -28,6 +28,13 @@ public class Monster {
         setNAME(api);
     }
 
+    // TODO: finish the override
+    @Override
+    public String toString() {
+        return NAME;
+    }
+
+
     /**
      * The getter for the HP.
      */

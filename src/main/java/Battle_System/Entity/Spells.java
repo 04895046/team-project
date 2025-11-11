@@ -13,6 +13,12 @@ public class Spells {
         this.DMG = DMG;
     }
 
+    // TODO: finish the override
+    @Override
+    public String toString() {
+        return spellName;
+    }
+
     /**
      * The getter for spellName.
      */
