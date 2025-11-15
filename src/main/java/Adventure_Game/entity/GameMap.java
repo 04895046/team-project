@@ -49,4 +49,8 @@ public class GameMap {
 
         return success;
     }
+
+    public int getMapSize() {
+        return this.locations.size();
+    }
 }

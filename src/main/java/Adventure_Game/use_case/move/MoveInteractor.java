@@ -33,12 +33,17 @@ public class MoveInteractor implements MoveInputBoundary {
         double latitude = currentLocation.getLatitude();
         double longitude = currentLocation.getLongitude();
 
+        int currentIndex = game.getGameMap().getCurrentLocationIndex();
+        int mapSize = game.getGameMap().getMapSize();
+
         Monster monster = currentLocation.getMonster();
         // Item item = currentLocation.getItem();
         MoveOutputData outputData = new MoveOutputData(
                 locationName,
                 latitude,
                 longitude,
+                currentIndex,
+                mapSize,
                 canMoveLeft,
                 canMoveRight,
                 monster
