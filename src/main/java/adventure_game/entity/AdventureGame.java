@@ -1,7 +1,6 @@
-package Adventure_Game.entity;
+package adventure_game.entity;
 
 import Battle_System.User.User;
-
 import java.util.LinkedList;
 import java.util.List;
 

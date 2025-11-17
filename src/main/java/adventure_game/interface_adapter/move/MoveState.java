@@ -1,4 +1,4 @@
-package Adventure_Game.interface_adapter.move;
+package adventure_game.interface_adapter.move;
 
 import Battle_System.User.Monster;
 

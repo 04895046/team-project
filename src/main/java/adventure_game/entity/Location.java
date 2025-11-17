@@ -1,4 +1,4 @@
-package Adventure_Game.entity;
+package adventure_game.entity;
 
 import Battle_System.User.Monster;
 

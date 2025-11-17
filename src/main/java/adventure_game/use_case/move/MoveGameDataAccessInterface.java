@@ -1,6 +1,6 @@
-package Adventure_Game.use_case.move;
+package adventure_game.use_case.move;
 
-import Adventure_Game.entity.AdventureGame;
+import adventure_game.entity.AdventureGame;
 
 public interface MoveGameDataAccessInterface {
     AdventureGame getGame();

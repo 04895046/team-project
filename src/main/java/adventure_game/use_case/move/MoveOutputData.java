@@ -1,4 +1,4 @@
-package Adventure_Game.use_case.move;
+package adventure_game.use_case.move;
 
 import Battle_System.User.Monster;
 
