@@ -48,21 +48,4 @@ public class Location {
     public double getLongitude() {
         return longitude;
     }
-
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-        json.put("name", name);
-        json.put("latitude", latitude);
-        json.put("longitude", longitude);
-        return json;
-    }
-
-    public static Location fromJSON(JSONObject json) {
-        String name = json.getString("name");
-        double latitude = json.getDouble("latitude");
-        double longitude = json.getDouble("longitude");
-        // Monster is currently initialized to null as it's not persisted
-        return new Location(name, latitude, longitude, null);
-    }
-
 }

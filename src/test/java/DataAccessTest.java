@@ -9,7 +9,7 @@ class DataAccessTest {
         UserDAO userDAO = new FileUserDAO();
 
         // Create a user (with empty lists for now)
-        User user = new User("test");
+        User user = new User();
 
         // Save user
         System.out.println("Saving user...");

@@ -57,30 +57,4 @@ public class GameMap {
     public int getMapSize() {
         return this.locations.size();
     }
-
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-        json.put("currentLocationIndex", currentLocationIndex);
-
-        JSONArray locationsArray = new JSONArray();
-        for (Location loc : locations) {
-            locationsArray.put(loc.toJSON());
-        }
-        json.put("locations", locationsArray);
-
-        return json;
-    }
-
-    public static GameMap fromJSON(JSONObject json) {
-        int currentIndex = json.getInt("currentLocationIndex");
-        JSONArray locationsArray = json.getJSONArray("locations");
-
-        List<Location> loadedLocations = new ArrayList<>();
-        for (int i = 0; i < locationsArray.length(); i++) {
-            loadedLocations.add(Location.fromJSON(locationsArray.getJSONObject(i)));
-        }
-
-        return new GameMap(loadedLocations, currentIndex);
-    }
-
 }
