@@ -18,6 +18,30 @@ public class User {
         this.inventory = new ArrayList<>();
     }
 
+    public double getHp() {
+        return hp;
+    }
+
+    public void setHp(double hp) {
+        this.hp = hp;
+    }
+
+    public double getDmg() {
+        return dmg;
+    }
+
+    public void setDmg(double dmg) {
+        this.dmg = dmg;
+    }
+
+    public double getDef() {
+        return def;
+    }
+
+    public void setDef(double def) {
+        this.def = def;
+    }
+
     public ArrayList<Item> getInventory() {
         return inventory;
     }

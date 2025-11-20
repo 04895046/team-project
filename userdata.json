@@ -1,55 +1,55 @@
 {
-  "user": {
-    "hp": 0.0,
-    "dmg": 0.0,
-    "def": 0.0,
-    "inventory": []
-  },
-  "gameMap": {
-    "locations": [
-      {
-        "name": "Forest",
-        "latitude": 43.6532,
-        "longitude": -79.3832
-      },
-      {
-        "name": "Cave",
-        "latitude": 43.654,
-        "longitude": -79.384
-      },
-      {
-        "name": "Mountain",
-        "latitude": 43.655,
-        "longitude": -79.385
-      }
+    "pathHistory": [
+        {
+            "latitude": 43.6532,
+            "name": "Forest",
+            "longitude": -79.3832
+        },
+        {
+            "latitude": 43.654,
+            "name": "Cave",
+            "longitude": -79.384
+        },
+        {
+            "latitude": 43.655,
+            "name": "Mountain",
+            "longitude": -79.385
+        },
+        {
+            "latitude": 43.654,
+            "name": "Cave",
+            "longitude": -79.384
+        },
+        {
+            "latitude": 43.655,
+            "name": "Mountain",
+            "longitude": -79.385
+        }
     ],
-    "currentLocationIndex": 0
-  },
-  "pathHistory": [
-    {
-      "name": "Forest",
-      "latitude": 43.6532,
-      "longitude": -79.3832
+    "user": {
+        "def": 0,
+        "hp": 0,
+        "inventory": [],
+        "dmg": 0
     },
-    {
-      "name": "Cave",
-      "latitude": 43.654,
-      "longitude": -79.384
-    },
-    {
-      "name": "Mountain",
-      "latitude": 43.655,
-      "longitude": -79.385
-    },
-    {
-      "name": "Cave",
-      "latitude": 43.654,
-      "longitude": -79.384
-    },
-    {
-      "name": "Forest",
-      "latitude": 43.6532,
-      "longitude": -79.3832
+    "gameMap": {
+        "currentLocationIndex": 2,
+        "locations": [
+            {
+                "latitude": 43.6532,
+                "name": "Forest",
+                "longitude": -79.3832
+            },
+            {
+                "latitude": 43.654,
+                "name": "Cave",
+                "longitude": -79.384
+            },
+            {
+                "latitude": 43.655,
+                "name": "Mountain",
+                "longitude": -79.385
+            }
+        ]
     }
-  ]
 }
