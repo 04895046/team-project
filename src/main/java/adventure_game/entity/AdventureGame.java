@@ -1,7 +1,11 @@
-package Adventure_Game.entity;
+package adventure_game.entity;
 
 import Battle_System.User.User;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 

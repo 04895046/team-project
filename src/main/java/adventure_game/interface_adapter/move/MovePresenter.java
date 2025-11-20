@@ -1,7 +1,7 @@
-package Adventure_Game.interface_adapter.move;
+package adventure_game.interface_adapter.move;
 
-import Adventure_Game.use_case.move.MoveOutputBoundary;
-import Adventure_Game.use_case.move.MoveOutputData;
+import adventure_game.use_case.move.MoveOutputBoundary;
+import adventure_game.use_case.move.MoveOutputData;
 
 import javax.swing.*;
 

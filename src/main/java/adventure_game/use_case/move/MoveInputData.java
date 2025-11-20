@@ -1,6 +1,6 @@
-package Adventure_Game.use_case.move;
+package adventure_game.use_case.move;
 
-import Adventure_Game.entity.Direction;
+import adventure_game.entity.Direction;
 
 public class MoveInputData {
     private Direction direction;

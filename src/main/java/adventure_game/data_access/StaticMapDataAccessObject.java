@@ -1,7 +1,6 @@
-package Adventure_Game.data_access;
+package adventure_game.data_access;
 
-import Adventure_Game.interface_adapter.move.MoveStaticMapDataAccessInterface;
-
+import adventure_game.interface_adapter.move.MoveStaticMapDataAccessInterface;
 import javax.swing.*;
 import java.awt.*;
 

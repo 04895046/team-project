@@ -1,8 +1,8 @@
-package Adventure_Game.interface_adapter.move;
+package adventure_game.interface_adapter.move;
 
-import Adventure_Game.entity.Direction;
-import Adventure_Game.use_case.move.MoveInputBoundary;
-import Adventure_Game.use_case.move.MoveInputData;
+import adventure_game.entity.Direction;
+import adventure_game.use_case.move.MoveInputBoundary;
+import adventure_game.use_case.move.MoveInputData;
 
 public class MoveController {
     private final MoveInputBoundary moveUseCaseInteractor;

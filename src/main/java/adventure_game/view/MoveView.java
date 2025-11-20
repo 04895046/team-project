@@ -1,10 +1,9 @@
-package Adventure_Game.view;
+package adventure_game.view;
 
-import Adventure_Game.entity.Direction;
-import Adventure_Game.interface_adapter.move.MoveController;
-import Adventure_Game.interface_adapter.move.MoveState;
-import Adventure_Game.interface_adapter.move.MoveViewModel;
-
+import adventure_game.entity.Direction;
+import adventure_game.interface_adapter.move.MoveController;
+import adventure_game.interface_adapter.move.MoveState;
+import adventure_game.interface_adapter.move.MoveViewModel;
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;

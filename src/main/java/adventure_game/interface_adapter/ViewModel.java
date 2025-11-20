@@ -1,4 +1,4 @@
-package Adventure_Game.interface_adapter;
+package adventure_game.interface_adapter;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

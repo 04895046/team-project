@@ -1,19 +1,19 @@
-package Adventure_Game;
+package adventure_game;
 
-import Adventure_Game.data_access.InMemoryUserDataAccessObject;
-import Adventure_Game.data_access.StaticMapDataAccessObject;
-import Adventure_Game.entity.AdventureGame;
-import Adventure_Game.entity.Direction;
-import Adventure_Game.entity.Location;
-import Adventure_Game.interface_adapter.move.MoveController;
-import Adventure_Game.interface_adapter.move.MovePresenter;
-import Adventure_Game.interface_adapter.move.MoveStaticMapDataAccessInterface;
-import Adventure_Game.interface_adapter.move.MoveViewModel;
-import Adventure_Game.use_case.move.MoveGameDataAccessInterface;
-import Adventure_Game.use_case.move.MoveInputBoundary;
-import Adventure_Game.use_case.move.MoveInteractor;
-import Adventure_Game.use_case.move.MoveOutputData;
-import Adventure_Game.view.MoveView;
+import adventure_game.data_access.InMemoryUserDataAccessObject;
+import adventure_game.data_access.StaticMapDataAccessObject;
+import adventure_game.entity.AdventureGame;
+import adventure_game.entity.Direction;
+import adventure_game.entity.Location;
+import adventure_game.interface_adapter.move.MoveController;
+import adventure_game.interface_adapter.move.MovePresenter;
+import adventure_game.interface_adapter.move.MoveStaticMapDataAccessInterface;
+import adventure_game.interface_adapter.move.MoveViewModel;
+import adventure_game.use_case.move.MoveGameDataAccessInterface;
+import adventure_game.use_case.move.MoveInputBoundary;
+import adventure_game.use_case.move.MoveInteractor;
+import adventure_game.use_case.move.MoveOutputData;
+import adventure_game.view.MoveView;
 import Battle_System.User.Monster;
 
 import javax.swing.*;

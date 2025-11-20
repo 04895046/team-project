@@ -1,8 +1,8 @@
-package Adventure_Game.use_case.move;
+package adventure_game.use_case.move;
 
-import Adventure_Game.entity.AdventureGame;
-import Adventure_Game.entity.Direction;
-import Adventure_Game.entity.Location;
+import adventure_game.entity.AdventureGame;
+import adventure_game.entity.Direction;
+import adventure_game.entity.Location;
 import Battle_System.User.Monster;
 
 public class MoveInteractor implements MoveInputBoundary {
