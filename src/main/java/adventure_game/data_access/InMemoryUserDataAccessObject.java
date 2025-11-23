@@ -1,5 +1,6 @@
 package adventure_game.data_access;
 
+import Battle_System.Entity.User;
 import adventure_game.entity.AdventureGame;
 import adventure_game.entity.GameMap;
 import adventure_game.entity.Location;
