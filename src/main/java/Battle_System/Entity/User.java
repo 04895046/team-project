@@ -1,5 +1,6 @@
 package Battle_System.Entity;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class User {
@@ -11,6 +12,7 @@ public class User {
     private double bonusHP = 0;
     private double DMG = 8;
     private double DEF = 0;
+    private Inventory inventory;
 
     /**
      * The constructor for User class.
@@ -18,6 +20,7 @@ public class User {
     public User() {
         Random random = new Random();
         HP = random.nextInt(11) + 20;
+        inventory = new Inventory(new ArrayList<>());
     }
 
     // TODO: finish the override
@@ -76,6 +79,13 @@ public class User {
     }
 
     /**
+     * Add Bonus HP
+     */
+    public void addBonusHP(double hp){
+        bonusHP += hp;
+    }
+
+    /**
      * Add DMG, this method will be called when user equip the weapon or change the weapon.
      */
     public void addDMG(double dmg){DMG += dmg;}
@@ -96,7 +106,48 @@ public class User {
     public void decreaseDEF(double def){DEF -= def;}
 
     /**
+     * add item to user's inventory, method called when item is picked up by user
+     *
+     */
+    public void addItem(Item item){
+        inventory.addItem(item);
+    }
+
+    /**
+     * remove item from inventory, method will be called when item is used by user
+     *
+     */
+    public void removeItem(Item item){
+        inventory.removeItem(item);
+    }
+
+    /**
+     *
+     * Find an item by its name
+     */
+    public Item getItemByName(String name) {
+        return inventory.getItemByName(name);
+    }
+
+    /**
+     *
+     * @return inventory of the user
+     */
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    /**
+     *
+     * @return boolean whether the inventory contains any items
+     */
+    public boolean hasItems() {
+    return !inventory.getItems().isEmpty();
+    }
+
+    /**
      * Return true if the HP of the user is greater than 0, which indicate the user is still alive.
      */
     public boolean isAlive() {return HP > 0;}
+
 }

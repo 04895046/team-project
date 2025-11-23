@@ -1,5 +1,6 @@
 package Battle_System.GameAPI;
 
+import Battle_System.Entity.Item;
 import Battle_System.Entity.Spells;
 
 import java.util.ArrayList;
@@ -24,6 +25,11 @@ public interface MonsterDetail {
      */
     String[] generateRaces() throws MonsterNotFoundException;
 
+    /**
+     * this method will get an HashMap for items, where the keys are the names of the items
+     * @throws MonsterNotFoundException throws the exception if nothing is found
+     */
+    ArrayList<Item> generateItems() throws MonsterNotFoundException;
 
     class MonsterNotFoundException extends RuntimeException {
         public MonsterNotFoundException() {

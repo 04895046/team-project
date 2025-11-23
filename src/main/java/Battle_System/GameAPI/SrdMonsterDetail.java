@@ -1,5 +1,8 @@
 package Battle_System.GameAPI;
 
+import Battle_System.Entity.Item;
+import Battle_System.Entity.Spells;
+import okhttp3.*;
 import Battle_System.Entity.Spells;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -21,7 +24,7 @@ public class SrdMonsterDetail implements MonsterDetail {
      * @throws MonsterNotFoundException throws the exception if nothing is founded
      */
     @Override
-    public HashMap<String,String> getAllResourcesURL() {
+    public HashMap<String, String> getAllResourcesURL() {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("text/plain");
@@ -29,14 +32,14 @@ public class SrdMonsterDetail implements MonsterDetail {
                 .url("https://www.dnd5eapi.co/api/2014")
                 .addHeader("Accept", "application/json")
                 .build();
-        HashMap<String,String> map = new HashMap<>();
-        try{
+        HashMap<String, String> map = new HashMap<>();
+        try {
             final Response response = client.newCall(request).execute();
             final JSONObject responseBody = new JSONObject(response.body().string());
-            for (String str: responseBody.keySet()) {
-               map.put(str,responseBody.getString(str));
+            for (String str : responseBody.keySet()) {
+                map.put(str, responseBody.getString(str));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new MonsterNotFoundException();
         }
         return map;
@@ -52,7 +55,7 @@ public class SrdMonsterDetail implements MonsterDetail {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url(String.format("https://www.dnd5eapi.co%s",getAllResourcesURL().get("spells")))
+                .url(String.format("https://www.dnd5eapi.co%s", getAllResourcesURL().get("spells")))
                 .addHeader("Accept", "application/json")
                 .build();
         ArrayList<Spells> theSpell = new ArrayList<Spells>();
@@ -82,7 +85,7 @@ public class SrdMonsterDetail implements MonsterDetail {
                 .build();
         MediaType mediaType = MediaType.parse("text/plain");
         Request request = new Request.Builder()
-                .url(String.format("https://www.dnd5eapi.co%s",getAllResourcesURL().get("races")))
+                .url(String.format("https://www.dnd5eapi.co%s", getAllResourcesURL().get("races")))
                 .addHeader("Accept", "application/json")
                 .build();
         try {
@@ -93,7 +96,7 @@ public class SrdMonsterDetail implements MonsterDetail {
             for (int i = 0; i < results.length(); i++) {
                 JSONObject races = results.getJSONObject(i);
                 String name = races.getString("name");
-                list[i] =  name;
+                list[i] = name;
             }
             return list;
         } catch (Exception e) {
@@ -101,4 +104,38 @@ public class SrdMonsterDetail implements MonsterDetail {
         }
     }
 
+    /**
+     * This method generates an array for items
+     *
+     * @throws MonsterNotFoundException throws the exception if nothing is founded.
+     */
+    @Override
+    public ArrayList<Item> generateItems() {
+
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        Request request = new Request.Builder()
+                .url(String.format("https://www.dnd5eapi.co%s", getAllResourcesURL().get("magic-items")))
+                .addHeader("Accept", "application/json")
+                .build();
+        ArrayList<Item> items = new ArrayList<>();
+
+        try {
+            final Response response = client.newCall(request).execute();
+            final JSONObject responsebody = new JSONObject(response.body().string());
+            JSONArray results = responsebody.getJSONArray("results");
+
+            for (int i = 0; i < results.length(); i++) {
+                JSONObject item = results.getJSONObject(i);
+                String name = item.getString("name");
+                String type = item.getJSONObject("equipment_category").getString("index");
+
+                items.add(new Item(name, type));
+            }
+
+        } catch (Exception exception) {
+            throw new MonsterNotFoundException();
+        }
+        return items;
+    }
 }
