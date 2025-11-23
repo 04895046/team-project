@@ -3,12 +3,16 @@ package Battle_System.GameAPI;
 import Battle_System.Entity.Item;
 import Battle_System.Entity.Spells;
 import okhttp3.*;
+import Battle_System.Entity.Spells;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 
 /**
  * this class is for Game API, the methods inside of this class will generate the information for Monster class.
@@ -16,7 +20,6 @@ import java.util.HashMap;
 public class SrdMonsterDetail implements MonsterDetail {
     /**
      * this method will get the url for races and spells from the api
-     *
      * @return a HashMap, the keys are "spells" and "races", the values are the corresponding urls
      * @throws MonsterNotFoundException throws the exception if nothing is founded
      */
@@ -44,7 +47,6 @@ public class SrdMonsterDetail implements MonsterDetail {
 
     /**
      * this method will get the ArrayList for spells
-     *
      * @return a ArrayList
      * @throws MonsterNotFoundException throws the exception if nothing is founded
      */
@@ -75,7 +77,6 @@ public class SrdMonsterDetail implements MonsterDetail {
 
     /**
      * this method will get an Array for races
-     *
      * @throws MonsterNotFoundException throws the exception if nothing is founded
      */
     @Override
