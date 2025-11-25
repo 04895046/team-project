@@ -249,6 +249,8 @@ public class Battle_View extends JPanel implements ActionListener, PropertyChang
                     state.getBattleMessage(),
                     title,
                     messageType);
+            viewManagerModel.setState("move");
+            viewManagerModel.firePropertyChange();
         } else {
             // Battle continues - re-enable buttons
             attackButton.setEnabled(true);
