@@ -58,8 +58,8 @@ public class AppBuilder {
 
     public AppBuilder addMoveView() {
         moveViewModel = new MoveViewModel();
-        // moveView = new MoveView(moveViewModel);
-        // cardPanel.add(moveView, moveView.getViewName());
+        moveView = new MoveView(moveViewModel);
+        cardPanel.add(moveView, moveView.getViewName());
         return this;
     }
 
