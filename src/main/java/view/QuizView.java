@@ -19,7 +19,6 @@ public class QuizView extends JPanel implements PropertyChangeListener {
     private final JLabel questionLabel = new JLabel();
     private final ButtonGroup optionGroup = new ButtonGroup();
     private final JRadioButton[] optionButtons = new JRadioButton[4];
-    private final JButton submitButton = new JButton("Submit");
     private final JLabel feedbackLabel = new JLabel("", SwingConstants.CENTER);
 
     private int currentQuizId;
@@ -62,6 +61,7 @@ public class QuizView extends JPanel implements PropertyChangeListener {
         bottomPanel.setOpaque(false);
         bottomPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
 
+        JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(this::handleSubmit);
         submitButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         submitButton.setPreferredSize(new Dimension(0, 36));

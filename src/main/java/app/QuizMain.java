@@ -69,13 +69,10 @@ public class QuizMain {
             mainFrame.add(cardPanel);
 
             // Add ViewManagerModel listener to switch views
-            viewManagerModel.addPropertyChangeListener(new PropertyChangeListener() {
-                @Override
-                public void propertyChange(PropertyChangeEvent evt) {
-                    if ("state".equals(evt.getPropertyName())) {
-                        String viewName = (String) evt.getNewValue();
-                        cardLayout.show(cardPanel, viewName);
-                    }
+            viewManagerModel.addPropertyChangeListener(evt -> {
+                if ("state".equals(evt.getPropertyName())) {
+                    String viewName = (String) evt.getNewValue();
+                    cardLayout.show(cardPanel, viewName);
                 }
             });
 
