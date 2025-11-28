@@ -2,13 +2,10 @@ package view;
 
 // imports
 import entity.Item;
-import interface_adapter.Inventory.Inventory_Controller;
 import interface_adapter.InventoryAddItem.InventoryAddItem_ViewModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
