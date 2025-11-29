@@ -48,7 +48,7 @@ public class BattleSystemTestApp {
         cardPanel = new JPanel(cardLayout);
 
         // Initialize ViewModels
-        ViewManagerModel viewManagerModel = new ViewManagerModel("Battle");
+        ViewManagerModel viewManagerModel = new ViewManagerModel();
         Battle_ViewModel battleViewModel = new Battle_ViewModel();
         Quiz_ViewModel quizViewModel = new Quiz_ViewModel();
 
@@ -88,7 +88,7 @@ public class BattleSystemTestApp {
         Battle_Controller battleController = new Battle_Controller(battleInteractor, quizViewModel);
 
         // Create Views
-        Battle_View battleView = new Battle_View(battleViewModel, viewManagerModel, quizViewModel);
+        Battle_View battleView = new Battle_View(battleViewModel);
         battleView.setBattleController(battleController);
 
         Quiz_View quizView = new Quiz_View(quizViewModel, viewManagerModel);

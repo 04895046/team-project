@@ -1,7 +1,7 @@
 package entity;
 import java.util.ArrayList;
 import java.util.List;
-
+// TODO: Rename it
 public class GameState {
     private String currentLocation;
     private final String finalDestination;

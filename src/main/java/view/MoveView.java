@@ -12,10 +12,9 @@ import java.beans.PropertyChangeListener;
 public class MoveView extends JPanel implements PropertyChangeListener {
     public static final String LEFT_BUTTON_LABEL = "Go Left";
     public static final String RIGHT_BUTTON_LABEL = "Go Right";
-
-    private final String viewName;
+    private final String viewName = "move";
     private final MoveViewModel moveViewModel;
-    private final MoveController moveController;
+    private MoveController moveController;
 
     private final JLabel linearMapLabel;
     private final JLabel staticMapImageLabel;
@@ -24,10 +23,9 @@ public class MoveView extends JPanel implements PropertyChangeListener {
     private final JButton goRightButton;
     private final JButton endGameButton;
 
-    public MoveView(MoveViewModel moveViewModel, MoveController moveController) {
+    public MoveView(MoveViewModel moveViewModel) {
         this.moveViewModel = moveViewModel;
-        this.moveController = moveController;
-        this.viewName = moveViewModel.getViewName();
+        this.moveController = null;
 
         this.moveViewModel.addPropertyChangeListener(this);
 
@@ -88,9 +86,12 @@ public class MoveView extends JPanel implements PropertyChangeListener {
             endGameButton.setVisible(!state.isRightButtonEnabled());
 
             // TODO
-//            if (state.getMonster() != null) {
-//
-//            } else if (state.getItem() != null) {
+            if (state.getMonster() != null && state.getMonster().isAlive()) {
+                moveController.switchToBattleView(state.getMonster());
+
+//                state.setMonster(null);
+            }
+//            else if (state.getItem() != null) {
 //
 //            }
         }
@@ -102,5 +103,9 @@ public class MoveView extends JPanel implements PropertyChangeListener {
 
     public JButton getEndGameButton() {
         return endGameButton;
+    }
+
+    public void setMoveController(MoveController moveController) {
+        this.moveController = moveController;
     }
 }
