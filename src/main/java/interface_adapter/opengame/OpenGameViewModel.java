@@ -3,6 +3,8 @@ import entity.GameState;
 
 import java.util.ArrayList;
 import java.util.List;
+// TODO: change the view model
+// TODO: not sure if u need the state for open game
 
 public class OpenGameViewModel {
     private String message;
