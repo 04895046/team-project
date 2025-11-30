@@ -7,7 +7,7 @@ import entity.User;
  * State object for the Battle View.
  *
  */
-public class Battle_State {
+public class BattleState {
     private User user = null;
     private Monster monster = null;
     private double userHp = 0;
