@@ -1,17 +1,13 @@
 package app;
 
-import data_access.FileGameDataAccessObject;
-import interface_adapter.Battle.Battle_Controller;
-import interface_adapter.Battle.Battle_Presenter;
-import interface_adapter.Battle.Battle_ViewModel;
+import interface_adapter.Battle.BattlePresenter;
+import interface_adapter.Battle.BattleViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.move.MoveViewModel;
 import interface_adapter.opengame.OpenGameViewModel;
 import interface_adapter.quiz.QuizViewModel;
 import interface_adapter.results.ResultsViewModel;
-import use_case.Battle.Battle_InputBoundary;
-import use_case.Battle.Battle_Interactor;
-import use_case.Battle.Battle_OutputBoundary;
+import use_case.Battle.BattleOutputBoundary;
 import view.*;
 
 import javax.swing.*;
@@ -33,8 +29,8 @@ public class AppBuilder {
     // DAO version using a shared external database
     // final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(userFactory);
 
-    private Battle_View battleView;
-    private Battle_ViewModel battleViewModel;
+    private BattleView battleView;
+    private BattleViewModel battleViewModel;
     private MoveView moveView;
     private MoveViewModel moveViewModel;
     private OpenGameView openGameView;
@@ -50,8 +46,8 @@ public class AppBuilder {
     }
 
     public AppBuilder addBattleView() {
-        battleViewModel = new Battle_ViewModel();
-        battleView = new Battle_View(battleViewModel);
+        battleViewModel = new BattleViewModel();
+        battleView = new BattleView(battleViewModel);
         cardPanel.add(battleView, battleView.getViewName());
         return this;
     }
@@ -72,8 +68,8 @@ public class AppBuilder {
 
     public AppBuilder addQuizView() {
         quizViewModel = new QuizViewModel();
-        // quizView = new QuizView(quizViewModel);
-        // cardPanel.add(quizView, quizView.getViewName());
+        quizView = new QuizView(quizViewModel);
+        cardPanel.add(quizView, quizView.getViewName());
         return this;
     }
 
@@ -92,7 +88,7 @@ public class AppBuilder {
     }
 
     public AppBuilder addBattleUseCase() {
-        final Battle_OutputBoundary signupOutputBoundary = new Battle_Presenter(battleViewModel, viewManagerModel);
+        final BattleOutputBoundary signupOutputBoundary = new BattlePresenter(battleViewModel, viewManagerModel);
         //final Battle_InputBoundary battleInteractor = new Battle_Interactor(
         //        userDataAccessObject, signupOutputBoundary);
 
