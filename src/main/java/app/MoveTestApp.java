@@ -13,19 +13,22 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.move.MoveController;
 import interface_adapter.move.MovePresenter;
 import interface_adapter.move.MoveViewModel;
+import interface_adapter.quiz.QuizController;
 import interface_adapter.quiz.Quiz_ViewModel;
 import interface_adapter.results.ResultsViewModel;
 import interface_adapter.results.ShowResultsController;
 import interface_adapter.results.ShowResultsPresenter;
 import use_case.Battle.Battle_Interactor;
+import use_case.loadQuiz.LoadQuizInputBoundary;
 import use_case.move.MoveInputBoundary;
 import use_case.move.MoveInteractor;
 import use_case.move.MoveOutputData;
+import use_case.quiz.SubmitQuizInputBoundary;
 import use_case.show_results.ShowResultsInputBoundary;
 import use_case.show_results.ShowResultsInteractor;
 import view.Battle_View;
 import view.MoveView;
-import view.Quiz_View;
+import view.QuizView;
 import view.ResultsView;
 
 import javax.swing.*;
@@ -51,6 +54,8 @@ public class MoveTestApp {
         ViewManagerModel viewManagerModel = new ViewManagerModel();
 
         Battle_ViewModel battleViewModel = new Battle_ViewModel();
+
+        QuizController quizController = new QuizController();
         Quiz_ViewModel quizViewModel = new Quiz_ViewModel();
 
         InMemoryBattleDataAccess battleDataAccess = new InMemoryBattleDataAccess();
@@ -64,8 +69,7 @@ public class MoveTestApp {
         Battle_View battleView = new Battle_View(battleViewModel);
         battleView.setBattleController(battleController);
 
-        Quiz_View quizView = new Quiz_View(quizViewModel, viewManagerModel);
-        quizView.setBattleController(battleController);
+        QuizView quizView = new QuizView(quizController, quizViewModel);
 
         MoveViewModel moveViewModel = new MoveViewModel();
         ResultsViewModel resultsViewModel = new ResultsViewModel();
