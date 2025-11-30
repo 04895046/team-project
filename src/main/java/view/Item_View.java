@@ -32,8 +32,7 @@ public class Item_View extends JPanel implements PropertyChangeListener {
         itemDescription.setWrapStyleWord(true);
 
         add(itemNameLabel, BorderLayout.NORTH);
-        add(itemDescription, BorderLayout.CENTER);
-    }
+        add(itemDescription, BorderLayout.CENTER); }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

@@ -31,10 +31,11 @@ public class Battle_View extends JPanel implements ActionListener, PropertyChang
     private final JLabel monsterHpLabel;
     private final JTextArea battleMessageArea;
     private final JButton attackButton;
-    private final JComboBox<String> inventoryDropdown = new JComboBox<>();
     private final JButton useItemButton = new JButton("Use Item");
-    private final JTextArea inventoryDetailsArea = new JTextArea(5,20);
-
+    //
+    private final JComboBox<String> inventoryDropdown = new JComboBox<>();
+    //private final JList<String> inventoryStrListArea = new JList<String>();
+    //private final JScrollPane inventoryDisplayScrollPane;
 
     public Battle_View(Battle_ViewModel battleViewModel) {
         this.viewModel = battleViewModel;
@@ -54,10 +55,12 @@ public class Battle_View extends JPanel implements ActionListener, PropertyChang
         battleMessageArea.setWrapStyleWord(true);
         battleMessageArea.setText("Battle is ready to begin...");
 
-        inventoryDetailsArea.setLineWrap(true);
-        inventoryDetailsArea.setEditable(false);
-        inventoryDetailsArea.setWrapStyleWord(true);
-        JScrollPane inventoryDisplayScrollPane = new JScrollPane(inventoryDetailsArea);
+        //dont think i need these anymore?
+        //inventoryStrListArea.setLineWrap(true);
+        //inventoryStrListArea.setEditable(false);
+        //inventoryStrListArea.setWrapStyleWord(true);
+
+        //this.inventoryDisplayScrollPane = new JScrollPane(inventoryStrListArea);
 
         useItemButton.setEnabled(false);
 
@@ -65,18 +68,26 @@ public class Battle_View extends JPanel implements ActionListener, PropertyChang
 
         // Add action listeners
         attackButton.addActionListener(this);
+
         inventoryDropdown.addActionListener(e-> {
             String selectedItemName = (String) inventoryDropdown.getSelectedItem();
             if (selectedItemName != null) {  //display details of item
-                inventoryDetailsArea.setText(selectedItemName); } else {
-                inventoryDetailsArea.setText("");
-                useItemButton.setEnabled(false); } } );
+            useItemButton.setEnabled(true);
+            }
+              // inventoryStrListArea.remove(sele);
+               //        setText(selectedItemName); } else {
+            // inventoryStrListArea.setText("");
+                 // useItemButton.setEnabled(false); }
+        } );
 
+
+        // use item button action listener
         useItemButton.addActionListener(e-> {
             String selectedItemName = (String) inventoryDropdown.getSelectedItem();
             if (selectedItemName != null && inventoryController != null) {
                 inventoryController.useItem(selectedItemName);
                 inventoryDropdown.removeItem(selectedItemName);
+                /// remove item from inventory?
                 useItemButton.setEnabled(false);}
         else {useItemButton.setEnabled(true);}} );
 
@@ -215,9 +226,16 @@ public class Battle_View extends JPanel implements ActionListener, PropertyChang
      * Updates all display elements based on the current state.
      */
     private void updateDisplay(Battle_State state) {
-        // Update user info
+        // Update user info + user's inventory
         if (state.getUser() != null) {
             userHpLabel.setText(String.format("HP: %.1f", state.getUserHp()));
+            // inventoryDropdown
+            inventoryDropdown.removeAllItems();
+            for (String item : state.getUser().getInventory().getItemsList()) {
+                inventoryDropdown.addItem(item);
+            }
+
+
         }
 
         // Update monster info
