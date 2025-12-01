@@ -15,13 +15,11 @@ import interface_adapter.quiz.QuizController;
 public class BattleController {
     private final BattleInputBoundary battleUseCaseInteractor;
     private final QuizViewModel quizViewModel;
-    private final QuizController quizController;
 
 
-    public BattleController(BattleInputBoundary battleUseCaseInteractor, QuizViewModel quizViewModel, QuizController quizController) {
+    public BattleController(BattleInputBoundary battleUseCaseInteractor, QuizViewModel quizViewModel) {
         this.battleUseCaseInteractor = battleUseCaseInteractor;
         this.quizViewModel = quizViewModel;
-        this.quizController = quizController;
     }
 
     public void execute(User user, Monster monster, boolean resultOfQuiz){
@@ -35,14 +33,8 @@ public class BattleController {
         // store battle context in quiz state
         quizState.setUser(user);
         quizState.setMonster(monster);
-
-        // generate a new random quiz ID
         quizState.setQuizId();
-
-        int quizId = quizState.getQuizId();
-
-        // load that quiz
-        quizController.loadQuiz(quizId);
+        quizViewModel.firePropertyChange();
 
         // tell the battle use case to switch to quiz view
         battleUseCaseInteractor.switchToQuizView();

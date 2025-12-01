@@ -79,8 +79,9 @@ public class MoveTestApp {
         OpenGameController openGameController =
                 new OpenGameController(openGameInteractor);
 
-        OpenGameView openGameView =
-                new OpenGameView(openGameController, openGameViewModel);
+        OpenGameView openGameView = new OpenGameView(openGameViewModel);
+
+        openGameView.setOpenGameController(openGameController);
 
         BattlePresenter battlePresenter = new BattlePresenter(battleViewModel, viewManagerModel);
 
@@ -98,7 +99,7 @@ public class MoveTestApp {
 
         // Create Controller (inject BOTH interactors)
         QuizController quizController = new QuizController(submitQuizInteractor, loadQuizInteractor);
-        BattleController battleController = new BattleController(battleInteractor, quizViewModel, quizController);
+        BattleController battleController = new BattleController(battleInteractor, quizViewModel);
 
         battleView.setBattleController(battleController);
         QuizView quizView = new QuizView(quizViewModel);
