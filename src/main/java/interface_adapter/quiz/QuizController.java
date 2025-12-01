@@ -26,7 +26,7 @@ public class QuizController {
         submitInteractor.submit(input);
     }
 
-    public void switchToBattleView() {
-        submitInteractor.switchToBattleView();
+    public void switchToBattleView(boolean isCorrect) {
+        submitInteractor.switchToBattleView(isCorrect);
     }
 }

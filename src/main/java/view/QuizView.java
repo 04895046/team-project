@@ -136,6 +136,7 @@ public class QuizView extends JPanel implements PropertyChangeListener {
 
     private void showFeedback(QuizState state) {
         String status = state.getStatus();
+        boolean isCorrect = "CORRECT".equals(status);
         state.setStatus(null);
 
         JFrame feedbackFrame = new JFrame("Quiz Result");
@@ -154,7 +155,7 @@ public class QuizView extends JPanel implements PropertyChangeListener {
         okButton.addActionListener(e -> {
             feedbackFrame.dispose();
             if ("CORRECT".equals(status) || "INCORRECT".equals(status)) {
-                controller.switchToBattleView();
+                controller.switchToBattleView(isCorrect);  // 传递结果
             }
         });
         panel.add(okButton, BorderLayout.SOUTH);

@@ -190,36 +190,40 @@ public class OpenGameFileDataAccess implements OpenGameDataAccessInterface {
     public GameState loadGame() {
         try {
             File file = new File(saveFilePath);
-            if (!file.exists()) {
+            if (!file.exists() || file.length() == 0) {
                 return null;
             }
 
-            // ----- Read file as text -----
+            // read fiel
             FileReader reader = new FileReader(file, StandardCharsets.UTF_8);
             char[] buffer = new char[(int) file.length()];
             reader.read(buffer);
             reader.close();
 
             String jsonString = new String(buffer);
-
-            // ----- Convert text → JSON -----
             JSONObject json = new JSONObject(jsonString);
 
-            // ----- Build GameState -----
+            // check
+            if (!json.has("currentLocation") || !json.has("finalDestination")) {
+                return null;
+            }
+
             String currentLocation = json.getString("currentLocation");
             String finalDestination = json.getString("finalDestination");
 
             GameState state = new GameState(currentLocation, finalDestination);
 
-            // ----- Load inventory -----
-            JSONArray items = json.getJSONArray("inventory");
-            for (int i = 0; i < items.length(); i++) {
-                state.addItem(items.getString(i));
+            // load inventory
+            if (json.has("inventory")) {
+                JSONArray items = json.getJSONArray("inventory");
+                for (int i = 0; i < items.length(); i++) {
+                    state.addItem(items.getString(i));
+                }
             }
 
-            // ----- Completed flag -----
-            if (json.getBoolean("isCompleted")) {
-                state.setCurrentLocation(finalDestination);  // auto marks completed
+            // finished
+            if (json.has("isCompleted") && json.getBoolean("isCompleted")) {
+                state.setCurrentLocation(finalDestination);
             }
 
             return state;
