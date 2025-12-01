@@ -79,8 +79,6 @@
 
 package use_case.openGame;
 
-import entity.GameState;
-
 public class OpenGameInteractor implements OpenGameInputBoundary {
 
     private final OpenGameOutputBoundary presenter;
@@ -105,14 +103,6 @@ public class OpenGameInteractor implements OpenGameInputBoundary {
                 presenter.prepareFailView("A saved game already exists. Please click 'Continue Game'.");
                 return;
             }
-            //TODO: Can remove these?
-
-            GameState newState = new GameState(
-                    inputData.getStartingLocation(),
-                    inputData.getDestination()
-            );
-
-            // dataAccess.saveGame(newState);
 
             presenter.prepareSuccessView(
                     new OpenGameOutputData("New game started!" )
@@ -125,13 +115,6 @@ public class OpenGameInteractor implements OpenGameInputBoundary {
         // CASE 2: CONTINUE GAME
         if (!dataAccess.saveFileExists()) {
             presenter.prepareFailView("No saved game found. Please start a new game.");
-            return;
-        }
-
-        GameState saved = dataAccess.loadGame();
-
-        if (saved == null) {
-            presenter.prepareFailView("Saved game is corrupted.");
             return;
         }
 

@@ -16,10 +16,10 @@ public class OpenGameScreenSwitcher implements ScreenSwitchBoundary {
         viewManager.firePropertyChange();
     }
 
-    @Override
-    public void switchToResultScreen() {
-        viewManager.setState("Results");
-        viewManager.firePropertyChange();
-    }
+//    @Override
+//    public void switchToResultScreen() {
+//        viewManager.setState("Results");
+//        viewManager.firePropertyChange();
+//    }
 
 }

@@ -39,10 +39,10 @@ public class Main {
                 System.out.println("Switching to Move Screen...");
             }
 
-            @Override
-            public void switchToResultScreen() {
-                System.out.println("Switching to Result Screen...");
-            }
+//            @Override
+//            public void switchToResultScreen() {
+//                System.out.println("Switching to Result Screen...");
+//            }
         };
 
         // 5. Interactor
