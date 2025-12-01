@@ -79,8 +79,9 @@ public class MoveTestApp {
         OpenGameController openGameController =
                 new OpenGameController(openGameInteractor);
 
-        OpenGameView openGameView =
-                new OpenGameView(openGameController, openGameViewModel);
+        OpenGameView openGameView = new OpenGameView(openGameViewModel);
+
+        openGameView.setOpenGameController(openGameController);
 
         BattlePresenter battlePresenter = new BattlePresenter(battleViewModel, viewManagerModel);
 
