@@ -187,23 +187,6 @@ public class AppBuilder {
         application.add(cardPanel);
 
         viewManagerModel.setState(openGameView.getViewName());
-        viewManagerModel.addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                System.out.println(evt.getPropertyName());
-                if ("state".equals(evt.getPropertyName())) {
-                    String viewName = (String) evt.getNewValue();
-                    System.out.println("Switching view to: " + viewName);
-                    cardLayout.show(views, viewName);
-
-
-                    if ("Battle".equals(viewName)) {
-
-                    }
-                }
-            }
-        });
-        viewManagerModel.setState("OpenGame");
         viewManagerModel.firePropertyChange();
 
 

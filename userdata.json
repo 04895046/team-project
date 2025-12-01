@@ -7,7 +7,7 @@
         "DEF": 0,
         "alive": true,
         "bonusHP": 0,
-        "HP": 23,
+        "HP": 25,
         "inventory": {
             "items": [],
             "empty": true
@@ -28,8 +28,8 @@
                 "name": "Myhal Centre For Engineering Innovation & Entrepreneurship",
                 "longitude": -79.3966,
                 "monster": {
-                    "name": "Tiefling",
-                    "hp": 20,
+                    "name": "Halfling",
+                    "hp": 30,
                     "active": true
                 }
             },
