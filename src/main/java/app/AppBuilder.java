@@ -172,13 +172,16 @@ public class AppBuilder {
     }
 
     public JFrame build() {
-        final JFrame application = new JFrame("Java Adventure Game");
+        final JFrame application = new JFrame("Adventure & Battle Integrated System");
+        application.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        application.setSize(1024, 768);
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         application.add(cardPanel);
 
         viewManagerModel.setState(openGameView.getViewName());
         viewManagerModel.firePropertyChange();
+
 
         return application;
     }
