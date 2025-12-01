@@ -7,6 +7,9 @@ import data_access.QuizzesReader;
 import interface_adapter.Battle.BattleController;
 import interface_adapter.Battle.BattlePresenter;
 import interface_adapter.Battle.BattleViewModel;
+import interface_adapter.InventoryAddItem.InventoryAddItem_Presenter;
+import interface_adapter.InventoryAddItem.InventoryAddItem_ViewModel;
+import interface_adapter.InventoryUseItem.InventoryUseItem_ViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.move.MoveController;
 import interface_adapter.move.MovePresenter;
@@ -21,6 +24,7 @@ import interface_adapter.results.ShowResultsPresenter;
 import use_case.Battle.BattleInputBoundary;
 import use_case.Battle.BattleInteractor;
 import use_case.Battle.BattleOutputBoundary;
+import use_case.InventoryAddItem.InventoryAddItemOutputBoundary;
 import use_case.loadQuiz.LoadQuizInputBoundary;
 import use_case.loadQuiz.LoadQuizInteractor;
 import use_case.loadQuiz.LoadQuizOutputBoundary;
@@ -65,6 +69,10 @@ public class AppBuilder {
     private QuizViewModel quizViewModel;
     private ResultsView resultsView;
     private ResultsViewModel resultsViewModel;
+    private ItemView itemView;
+    private InventoryAddItem_ViewModel inventoryAddItemViewModel;
+    private InventoryView inventoryView;
+    private InventoryUseItem_ViewModel inventoryUseItemViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -102,6 +110,20 @@ public class AppBuilder {
         resultsViewModel = new ResultsViewModel();
         resultsView = new ResultsView(resultsViewModel);
         cardPanel.add(resultsView, resultsView.getViewName());
+        return this;
+    }
+
+    public AppBuilder addAddInventoryView() {
+        inventoryAddItemViewModel = new InventoryAddItem_ViewModel();
+        itemView = new ItemView(inventoryAddItemViewModel);
+        cardPanel.add(itemView, itemView.getViewName());
+        return this;
+    }
+
+    public AppBuilder addUseInventoryView() {
+        inventoryUseItemViewModel = new InventoryUseItem_ViewModel();
+        inventoryView = new InventoryView(inventoryUseItemViewModel);
+        cardPanel.add(inventoryView, inventoryView.getViewName());
         return this;
     }
 
@@ -162,6 +184,26 @@ public class AppBuilder {
         ShowResultsController controller = new ShowResultsController(showResultsInteractor);
         moveView.setResultController(controller);
         resultsView.setResultController(controller);
+        return this;
+    }
+
+    public AppBuilder addAddInventoryUseCase() {
+        final InventoryAddItemOutputBoundary inventoryAddItemOutputBoundary = new InventoryAddItem_Presenter(
+                inventoryAddItemViewModel);
+        final Inventory battleInteractor = new BattleInteractor(
+                gameDataAccess, battleOutputBoundary);
+
+        BattleController controller = new BattleController(battleInteractor, quizViewModel);
+        battleView.setBattleController(controller);
+        return this;
+    }
+    public AppBuilder addUseInventoryUseCase() {
+        final BattleOutputBoundary battleOutputBoundary = new BattlePresenter(battleViewModel, moveViewModel, viewManagerModel);
+        final BattleInputBoundary battleInteractor = new BattleInteractor(
+                gameDataAccess, battleOutputBoundary);
+
+        BattleController controller = new BattleController(battleInteractor, quizViewModel);
+        battleView.setBattleController(controller);
         return this;
     }
 

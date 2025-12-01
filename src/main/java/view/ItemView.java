@@ -15,6 +15,7 @@ import java.awt.*;
 
 
 public class ItemView extends JPanel {
+    private final String viewName = "AddItem";
     private final InventoryAddItem_ViewModel viewModel;
     private final JLabel itemNameLabel;
     private final JTextArea itemDescription;
@@ -50,6 +51,10 @@ public class ItemView extends JPanel {
                 JOptionPane.showMessageDialog(this, "Item added.");
             }
         });
+    }
+
+    public String getViewName() {
+        return viewName;
     }
 
     // set controller
