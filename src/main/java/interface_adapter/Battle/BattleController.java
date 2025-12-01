@@ -5,6 +5,8 @@ import entity.User;
 import use_case.Battle.BattleInputBoundary;
 import use_case.Battle.BattleInputData;
 import interface_adapter.quiz.QuizViewModel;
+import interface_adapter.quiz.QuizState;
+import interface_adapter.quiz.QuizController;
 
 /**
  * Controller for the Battle Use Case.
@@ -26,8 +28,15 @@ public class BattleController {
     }
 
     public void switchToQuizView(User user, Monster monster){
-        quizViewModel.getState().setUser(user);
-        quizViewModel.getState().setMonster(monster);
+        QuizState quizState = quizViewModel.getState();
+
+        // store battle context in quiz state
+        quizState.setUser(user);
+        quizState.setMonster(monster);
+        quizState.setQuizId();
+        quizViewModel.firePropertyChange();
+
+        // tell the battle use case to switch to quiz view
         battleUseCaseInteractor.switchToQuizView();
     }
 }

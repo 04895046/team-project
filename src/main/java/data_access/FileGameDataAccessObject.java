@@ -3,14 +3,20 @@ package data_access;
 import entity.*;
 import use_case.Battle.BattleUserDataAccessInterface;
 import use_case.move.MoveGameDataAccessInterface;
+import use_case.openGame.OpenGameDataAccessInterface;
+import use_case.quiz.QuizDataAccessInterface;
 import use_case.show_results.ShowResultsGameDataAccessInterface;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FileGameDataAccessObject implements MoveGameDataAccessInterface,
-        ShowResultsGameDataAccessInterface, BattleUserDataAccessInterface {
+        ShowResultsGameDataAccessInterface, BattleUserDataAccessInterface,
+        QuizDataAccessInterface, OpenGameDataAccessInterface {
 
     // Battle state tracking
     private User userBeforeBattle;
@@ -21,6 +27,7 @@ public class FileGameDataAccessObject implements MoveGameDataAccessInterface,
     private AdventureGame game;
     private final FileDataAccess fileDataAccess;
     private static final String FILE_PATH = "userdata.json";
+    private final Map<Integer, Quiz> store = new HashMap<>();
 
     public FileGameDataAccessObject() {
         this.fileDataAccess = new FileDataAccess();
@@ -83,18 +90,20 @@ public class FileGameDataAccessObject implements MoveGameDataAccessInterface,
         startNewGame();
     }
 
-    // BattleUserDataAccessInterface implementation
-
+    // ==================== BattleUserDataAccessInterface ====================
     @Override
     public void save(User user, Monster monster) {
         // If this is the first save (before battle starts)
         if (userBeforeBattle == null) {
-            userBeforeBattle = user;
-            monsterBeforeBattle = monster;
+            userBeforeBattle = cloneUser(user);
+            monsterBeforeBattle = cloneMonster(monster);
+            System.out.println("=== BATTLE STATE SAVED ===");
+            System.out.println("Saved User HP: " + (userBeforeBattle != null ? userBeforeBattle.getHP() : "null"));
+            System.out.println("Saved Monster HP: " + (monsterBeforeBattle != null ? monsterBeforeBattle.getHP() : "null"));
         }
-        // Always update the "after" state
-        userAfterBattle = user;
-        monsterAfterBattle = monster;
+        // Always update the "after" state with deep copy
+        userAfterBattle = cloneUser(user);
+        monsterAfterBattle = cloneMonster(monster);
     }
 
     @Override
@@ -115,5 +124,125 @@ public class FileGameDataAccessObject implements MoveGameDataAccessInterface,
     @Override
     public Monster getMonsterAfterBattle() {
         return monsterAfterBattle;
+    }
+
+
+    public void resetBattleState() {
+        userBeforeBattle = null;
+        userAfterBattle = null;
+        monsterBeforeBattle = null;
+        monsterAfterBattle = null;
+    }
+
+    @Override
+    public void restoreUserToBeforeBattle() {
+        System.out.println("=== RESTORING USER ===");
+        System.out.println("userBeforeBattle: " + (userBeforeBattle != null ? "exists, HP=" + userBeforeBattle.getHP() : "null"));
+        System.out.println("game: " + (game != null ? "exists" : "null"));
+
+        if (userBeforeBattle != null && game != null) {
+            User currentUser = game.getUser();
+            System.out.println("currentUser before restore: HP=" + currentUser.getHP());
+            copyUserFields(userBeforeBattle, currentUser);
+            System.out.println("currentUser after restore: HP=" + currentUser.getHP());
+        }
+    }
+
+    private User cloneUser(User user) {
+        if (user == null) return null;
+
+        User clone = new User();
+        copyUserFields(user, clone);
+        return clone;
+    }
+
+
+    private void copyUserFields(User source, User target) {
+        try {
+            for (Field field : User.class.getDeclaredFields()) {
+                field.setAccessible(true);
+                Object value = field.get(source);
+                field.set(target, value);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private Monster cloneMonster(Monster monster) {
+        if (monster == null) return null;
+
+        Monster clone = new Monster();
+        try {
+            // clone HP
+            Field hpField = Monster.class.getDeclaredField("HP");
+            hpField.setAccessible(true);
+            hpField.set(clone, hpField.get(monster));
+
+            // clone NAME
+            clone.NAME = monster.NAME;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return clone;
+    }
+
+    // ==================== QuizUserDataAccessInterface ====================
+    @Override
+    public Quiz findById(int quizId) {
+        return store.get(quizId);
+    }
+
+    @Override
+    public void save(Quiz quiz) {
+        store.put(quiz.getQuizId(), quiz);
+    }
+
+    // helper for preloading quizzes during tests
+    public void put(Quiz quiz) {
+        save(quiz);
+    }
+
+    // ==================== OpenGameDataAccessInterface ====================
+
+    @Override
+    public GameState loadGame() {
+        if (this.game != null) {
+            String currentLocation = game.getGameMap().getCurrentLocation().getName();
+            String finalDestination = currentLocation;
+
+            try {
+                Field locationsField = GameMap.class.getDeclaredField("locations");
+                locationsField.setAccessible(true);
+                @SuppressWarnings("unchecked")
+                List<Location> locations = (List<Location>) locationsField.get(game.getGameMap());
+                if (!locations.isEmpty()) {
+                    finalDestination = locations.get(locations.size() - 1).getName();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return new GameState(currentLocation, finalDestination);
+        }
+        return null;
+    }
+
+    @Override
+    public void saveGame(GameState state) {
+
+    }
+
+    @Override
+    public boolean saveFileExists() {
+        File file = new File(FILE_PATH);
+        return file.exists() && file.length() > 0;
+    }
+
+    @Override
+    public void deleteSaveFile() {
+        clearGameData();
     }
 }

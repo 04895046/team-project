@@ -96,15 +96,19 @@ public class QuizView extends JPanel implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         QuizState state = viewModel.getState();
-
-        // Check if quiz was loaded (question text is set)
-        if (state.getQuestionText() != null) {
-            updateQuizDisplay(state);
+        if (state.getStatus() != null) {
+            showFeedback(state);  // 清空 status 的逻辑移到 showFeedback 里了
+            return;
         }
 
-        // Check if feedback should be shown
-        if (state.getStatus() != null) {
-            showFeedback(state);
+        int newQuizId = state.getQuizId();
+        if (newQuizId > 0 && newQuizId != currentQuizId) {
+            currentQuizId = newQuizId;
+            controller.loadQuiz(currentQuizId);
+        }
+
+        if (state.getQuestionText() != null) {
+            updateQuizDisplay(state);
         }
     }
 
@@ -131,7 +135,10 @@ public class QuizView extends JPanel implements PropertyChangeListener {
     }
 
     private void showFeedback(QuizState state) {
-        // Show feedback in separate frame
+        String status = state.getStatus();
+        boolean isCorrect = "CORRECT".equals(status);
+        state.setStatus(null);
+
         JFrame feedbackFrame = new JFrame("Quiz Result");
         feedbackFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         feedbackFrame.setSize(300, 150);
@@ -147,9 +154,8 @@ public class QuizView extends JPanel implements PropertyChangeListener {
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> {
             feedbackFrame.dispose();
-            // Switch to battle view if correct or incorrect (not warning)
-            if ("CORRECT".equals(state.getStatus()) || "INCORRECT".equals(state.getStatus())) {
-                controller.switchToBattleView();
+            if ("CORRECT".equals(status) || "INCORRECT".equals(status)) {
+                controller.switchToBattleView(isCorrect);  // 传递结果
             }
         });
         panel.add(okButton, BorderLayout.SOUTH);
@@ -201,6 +207,7 @@ public class QuizView extends JPanel implements PropertyChangeListener {
             return;
         }
 
-        controller.onSubmit(currentQuizId, selectedId);
+        int quizId = viewModel.getState().getQuizId();
+        controller.onSubmit(quizId, selectedId);
     }
 }
