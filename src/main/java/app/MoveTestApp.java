@@ -60,12 +60,13 @@ public class MoveTestApp {
 
         BattleViewModel battleViewModel = new BattleViewModel();
         QuizViewModel quizViewModel = new QuizViewModel();
-        InMemoryBattleDataAccess battleDataAccess = new InMemoryBattleDataAccess();
         InMemoryQuizDataAccessObject repo = new InMemoryQuizDataAccessObject();
+        FileGameDataAccessObject gameDataAccess = new FileGameDataAccessObject();
+        System.out.println(gameDataAccess.getGame().getUser().getHP());
 
         BattlePresenter battlePresenter = new BattlePresenter(battleViewModel, viewManagerModel);
 
-        BattleInteractor battleInteractor = new BattleInteractor(battleDataAccess, battlePresenter);
+        BattleInteractor battleInteractor = new BattleInteractor(gameDataAccess, battlePresenter);
 
         BattleController battleController = new BattleController(battleInteractor, quizViewModel);
 
@@ -92,8 +93,6 @@ public class MoveTestApp {
         MoveViewModel moveViewModel = new MoveViewModel();
         ResultsViewModel resultsViewModel = new ResultsViewModel();
 
-        FileGameDataAccessObject gameDataAccess = new FileGameDataAccessObject();
-        System.out.println(gameDataAccess.getGame().getUser().getHP());
         MoveStaticMapInterface mapService = new GeoapifyStaticMap();
 
         MovePresenter movePresenter = new MovePresenter(viewManagerModel, moveViewModel, mapService, battleViewModel);
