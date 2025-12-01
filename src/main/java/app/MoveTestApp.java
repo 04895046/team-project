@@ -16,9 +16,9 @@ import interface_adapter.move.MoveController;
 import interface_adapter.move.MovePresenter;
 import interface_adapter.move.MoveViewModel;
 import interface_adapter.quiz.*;
-import interface_adapter.results.ResultsViewModel;
-import interface_adapter.results.ShowResultsController;
-import interface_adapter.results.ShowResultsPresenter;
+import interface_adapter.ShowResults.ShowResultsViewModel;
+import interface_adapter.ShowResults.ShowResultsController;
+import interface_adapter.ShowResults.ShowResultsPresenter;
 import use_case.Battle.BattleInteractor;
 import use_case.loadQuiz.LoadQuizInputBoundary;
 import use_case.loadQuiz.LoadQuizInteractor;
@@ -34,7 +34,7 @@ import use_case.show_results.ShowResultsInteractor;
 import view.BattleView;
 import view.MoveView;
 import view.QuizView;
-import view.ResultsView;
+import view.ShowResultsView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -90,7 +90,7 @@ public class MoveTestApp {
         quizView.loadQuiz(quizState.setQuizId());
 
         MoveViewModel moveViewModel = new MoveViewModel();
-        ResultsViewModel resultsViewModel = new ResultsViewModel();
+        ShowResultsViewModel showResultsViewModel = new ShowResultsViewModel();
 
         FileGameDataAccessObject gameDataAccess = new FileGameDataAccessObject();
         System.out.println(gameDataAccess.getGame().getUser().getHP());
@@ -104,14 +104,14 @@ public class MoveTestApp {
         MoveView moveView = new MoveView(moveViewModel);
         moveView.setMoveController(moveController);
 
-        ShowResultsPresenter resultsPresenter = new ShowResultsPresenter(resultsViewModel);
+        ShowResultsPresenter resultsPresenter = new ShowResultsPresenter(showResultsViewModel);
         ShowResultsInputBoundary resultsInteractor = new ShowResultsInteractor(gameDataAccess, resultsPresenter);
         ShowResultsController resultsController = new ShowResultsController(resultsInteractor);
-        ResultsView resultsView = new ResultsView(resultsViewModel);
+        ShowResultsView showResultsView = new ShowResultsView(showResultsViewModel);
 
 
         views.add(moveView, moveView.getViewName());
-        views.add(resultsView, resultsView.getViewName());
+        views.add(showResultsView, showResultsView.getViewName());
         views.add(battleView, "Battle");
         views.add(quizView, "Quiz");
 
@@ -136,11 +136,11 @@ public class MoveTestApp {
 
         moveView.getEndGameButton().addActionListener(e -> {
             resultsController.execute();
-            viewManagerModel.setState(resultsViewModel.getViewName());
+            viewManagerModel.setState(showResultsViewModel.getViewName());
             viewManagerModel.firePropertyChange();
         });
 
-        resultsView.getBackButton().addActionListener(e -> {
+        showResultsView.getBackButton().addActionListener(e -> {
             System.out.println("Restarting game...");
             application.dispose();
             createAndShowGUI();
