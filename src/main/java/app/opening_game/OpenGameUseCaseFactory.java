@@ -9,13 +9,11 @@ import use_case.openGame.OpenGameDataAccessInterface;
 import use_case.openGame.OpenGameInputBoundary;
 import use_case.openGame.OpenGameInteractor;
 import use_case.openGame.OpenGameOutputBoundary;
-import use_case.openGame.ScreenSwitchBoundary;
 import view.OpenGameView;
 
 public class OpenGameUseCaseFactory {
 
     public static OpenGameView create(
-            ScreenSwitchBoundary switcher,
             ViewManagerModel viewManagerModel
     ) {
 
@@ -32,7 +30,7 @@ public class OpenGameUseCaseFactory {
 
         // 4. Create Interactor (UPDATED)
         OpenGameInputBoundary interactor =
-                new OpenGameInteractor(presenter, dataAccess, switcher);
+                new OpenGameInteractor(presenter, dataAccess);
 
         // 5. Create Controller
         OpenGameController controller = new OpenGameController(interactor);

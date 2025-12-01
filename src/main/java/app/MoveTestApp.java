@@ -14,7 +14,7 @@ import interface_adapter.move.MovePresenter;
 import interface_adapter.move.MoveViewModel;
 import interface_adapter.opengame.OpenGameController;
 import interface_adapter.opengame.OpenGamePresenter;
-import interface_adapter.opengame.OpenGameScreenSwitcher;
+// import interface_adapter.opengame.OpenGameScreenSwitcher;
 import interface_adapter.opengame.OpenGameViewModel;
 import interface_adapter.quiz.*;
 import interface_adapter.results.ResultsViewModel;
@@ -61,8 +61,11 @@ public class MoveTestApp {
         BattleViewModel battleViewModel = new BattleViewModel();
         QuizViewModel quizViewModel = new QuizViewModel();
         InMemoryQuizDataAccessObject repo = new InMemoryQuizDataAccessObject();
-        ScreenSwitchBoundary openGameScreenSwitcher =
-                new OpenGameScreenSwitcher(viewManagerModel);
+//        ScreenSwitchBoundary openGameScreenSwitcher =
+//                new OpenGameScreenSwitcher(viewManagerModel);
+//        OpenGameOutputBoundary openGamePresenter =
+//                new OpenGamePresenter(openGameViewModel, viewManagerModel);
+
 
         OpenGameOutputBoundary openGamePresenter =
                 new OpenGamePresenter(openGameViewModel, viewManagerModel);
@@ -71,7 +74,7 @@ public class MoveTestApp {
                 new OpenGameFileDataAccess("userdata.json");
 
         OpenGameInputBoundary openGameInteractor =
-                new OpenGameInteractor(openGamePresenter, openGameDAO, openGameScreenSwitcher);
+                new OpenGameInteractor(openGamePresenter, openGameDAO);
 
         OpenGameController openGameController =
                 new OpenGameController(openGameInteractor);

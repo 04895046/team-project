@@ -83,15 +83,21 @@ public class OpenGameInteractor implements OpenGameInputBoundary {
 
     private final OpenGameOutputBoundary presenter;
     private final OpenGameDataAccessInterface dataAccess;
-    private final ScreenSwitchBoundary screenSwitcher;
+    // private final ScreenSwitchBoundary screenSwitcher;
 
-    public OpenGameInteractor(OpenGameOutputBoundary presenter,
-                              OpenGameDataAccessInterface dataAccess,
-                              ScreenSwitchBoundary screenSwitcher) {
-        this.presenter = presenter;
-        this.dataAccess = dataAccess;
-        this.screenSwitcher = screenSwitcher;
-    }
+//    public OpenGameInteractor(OpenGameOutputBoundary presenter,
+//                              OpenGameDataAccessInterface dataAccess,
+//                              ScreenSwitchBoundary screenSwitcher) {
+//        this.presenter = presenter;
+//        this.dataAccess = dataAccess;
+//        this.screenSwitcher = screenSwitcher;
+//    }
+public OpenGameInteractor(OpenGameOutputBoundary presenter,
+                          OpenGameDataAccessInterface dataAccess) {
+    this.presenter = presenter;
+    this.dataAccess = dataAccess;
+}
+
 
     @Override
     public void execute(OpenGameInputData inputData) {
@@ -108,7 +114,8 @@ public class OpenGameInteractor implements OpenGameInputBoundary {
                     new OpenGameOutputData("New game started!" )
             );
 
-            screenSwitcher.switchToMoveScreen();
+//            screenSwitcher.switchToMoveScreen();
+            presenter.switchToMoveScreen();
             return;
         }
 
@@ -122,11 +129,13 @@ public class OpenGameInteractor implements OpenGameInputBoundary {
                 new OpenGameOutputData("Game loaded!")
         );
 
-        screenSwitcher.switchToMoveScreen();
+        //screenSwitcher.switchToMoveScreen();
+        presenter.switchToMoveScreen();
     }
 
     @Override
     public void switchToMoveScreen() {
-        screenSwitcher.switchToMoveScreen();
+//        screenSwitcher.switchToMoveScreen();
+        presenter.switchToMoveScreen();
     }
 }

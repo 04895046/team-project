@@ -37,7 +37,8 @@ public class OpenGamePresenter implements OpenGameOutputBoundary {
 
     @Override
     public void switchToMoveScreen() {
-        //null
+        viewManagerModel.setState("move");   // MoveView.getViewName()
+        viewManagerModel.firePropertyChange();
     }
 
     public OpenGameViewModel getViewModel() {
