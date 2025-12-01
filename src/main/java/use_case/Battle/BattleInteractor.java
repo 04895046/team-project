@@ -69,13 +69,13 @@ public class BattleInteractor implements BattleInputBoundary {
                 }
             }
 
-            // 保存游戏状态（玩家回到之前位置，HP恢复）
+            // save the game
             userDataAccessObject.saveGame(game);
 
-            // 重置战斗状态，为下次战斗做准备
+            // reset battle
             userDataAccessObject.resetBattleState();
 
-            // 更新 output 以反映恢复后的状态
+            // update output
             output = new BattleOutputData(user, monster);
 
             battlePresenter.prepareLossView(output);
