@@ -9,7 +9,6 @@ import data_access.OpenGameFileDataAccess;
 import entity.*;
 import interface_adapter.Battle.BattleController;
 import interface_adapter.Battle.BattlePresenter;
-import interface_adapter.Battle.BattleState;
 import interface_adapter.Battle.BattleViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.move.MoveController;
