@@ -5,6 +5,7 @@ import API.MoveStaticMapInterface;
 import data_access.FileGameDataAccessObject;
 import data_access.InMemoryBattleDataAccess;
 import data_access.InMemoryQuizDataAccessObject;
+import data_access.OpenGameFileDataAccess;
 import interface_adapter.Battle.BattleController;
 import interface_adapter.Battle.BattlePresenter;
 import interface_adapter.Battle.BattleViewModel;
@@ -12,16 +13,28 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.move.MoveController;
 import interface_adapter.move.MovePresenter;
 import interface_adapter.move.MoveViewModel;
+import interface_adapter.opengame.OpenGameController;
+import interface_adapter.opengame.OpenGamePresenter;
+import interface_adapter.opengame.OpenGameScreenSwitcher;
 import interface_adapter.opengame.OpenGameViewModel;
+import interface_adapter.quiz.LoadQuizPresenter;
 import interface_adapter.quiz.QuizController;
 import interface_adapter.quiz.QuizViewModel;
+import interface_adapter.quiz.SubmitQuizPresenter;
 import interface_adapter.results.ResultsViewModel;
 import use_case.Battle.BattleInputBoundary;
 import use_case.Battle.BattleInteractor;
 import use_case.Battle.BattleOutputBoundary;
+import use_case.loadQuiz.LoadQuizInputBoundary;
+import use_case.loadQuiz.LoadQuizInteractor;
+import use_case.loadQuiz.LoadQuizOutputBoundary;
 import use_case.move.MoveInputBoundary;
 import use_case.move.MoveInteractor;
 import use_case.move.MoveOutputBoundary;
+import use_case.openGame.*;
+import use_case.quiz.SubmitQuizInputBoundary;
+import use_case.quiz.SubmitQuizInteractor;
+import use_case.quiz.SubmitQuizOutputBoundary;
 import view.*;
 
 import javax.swing.*;
@@ -40,6 +53,7 @@ public class AppBuilder {
     private final FileGameDataAccessObject gameDataAccess = new FileGameDataAccessObject();
     private final InMemoryBattleDataAccess battleDataAccess = new InMemoryBattleDataAccess(gameDataAccess);
     private final InMemoryQuizDataAccessObject quizDataAccess = new InMemoryQuizDataAccessObject();
+    private final OpenGameDataAccessInterface openGameDAO = new OpenGameFileDataAccess("userdata.json");
 
     // DAO version using a shared external database
     // final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(userFactory);
@@ -117,10 +131,28 @@ public class AppBuilder {
     }
 
     public AppBuilder addOpenGameUseCase() {
+        final ScreenSwitchBoundary openGameScreenSwitcher = new OpenGameScreenSwitcher(viewManagerModel);
+        final OpenGameOutputBoundary openGameOutputBoundary = new OpenGamePresenter(
+                openGameViewModel, viewManagerModel);
+        final OpenGameInputBoundary openGameInteractor = new OpenGameInteractor(openGameOutputBoundary, openGameDAO ,
+                openGameScreenSwitcher);
+
+        OpenGameController controller = new OpenGameController(openGameInteractor);
+        openGameView.setOpenGameController(controller);
         return this;
     }
 
     public AppBuilder addQuizUseCase() {
+        final LoadQuizOutputBoundary loadQuizOutputBoundary = new LoadQuizPresenter(quizViewModel);
+        final LoadQuizInputBoundary loadQuizInteractor = new LoadQuizInteractor(
+                quizDataAccess, loadQuizOutputBoundary);
+        final SubmitQuizOutputBoundary submitQuizOutputBoundary = new SubmitQuizPresenter(
+                quizViewModel, battleViewModel, viewManagerModel);
+        final SubmitQuizInputBoundary submitQuizInteractor = new SubmitQuizInteractor(
+                quizDataAccess, submitQuizOutputBoundary);
+
+        QuizController controller = new QuizController(submitQuizInteractor, loadQuizInteractor);
+        quizView.setQuizController(controller);
         return this;
     }
 
