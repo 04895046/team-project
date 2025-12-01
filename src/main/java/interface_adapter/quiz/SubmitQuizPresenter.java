@@ -30,15 +30,11 @@ public class SubmitQuizPresenter implements SubmitQuizOutputBoundary {
     }
 
     @Override
-    public void switchToBattleView() {
-        QuizState quizState = viewModel.getState();
-        boolean isCorrect = "CORRECT".equals(quizState.getStatus());
-
+    public void switchToBattleView(boolean isCorrect) {
         BattleState battleState = battleViewModel.getState();
         battleState.setQuizResult(isCorrect);
         battleState.setJustFinishedQuiz(true);
 
-        // HACK: switch to battle view first then update battle's attributes
         viewManagerModel.setState(battleViewModel.getViewName());
         viewManagerModel.firePropertyChange();
 
