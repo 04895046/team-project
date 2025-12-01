@@ -129,7 +129,6 @@ public class MoveTestApp {
         ShowResultsController resultsController = new ShowResultsController(resultsInteractor);
         ResultsView resultsView = new ResultsView(resultsViewModel);
 
-
         views.add(openGameView, openGameView.getViewName());
         views.add(moveView, moveView.getViewName());
         views.add(resultsView, resultsView.getViewName());
