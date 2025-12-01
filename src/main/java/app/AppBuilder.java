@@ -39,7 +39,7 @@ public class AppBuilder {
     private QuizViewModel quizViewModel;
     private ResultsView resultsView;
     private ResultsViewModel resultsViewModel;
-    private ResultScreenView resultScreenView;
+    // private ResultScreenView resultScreenView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
