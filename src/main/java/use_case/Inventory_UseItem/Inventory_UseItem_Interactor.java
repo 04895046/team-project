@@ -43,14 +43,14 @@ public class Inventory_UseItem_Interactor implements Inventory_InputBoundary_Use
         if (user == null || inputDataUseItem == null) {return;}
         // Item from data access
         Item item = user.getItemByName(inputDataUseItem.getItemName());
-        //if (item == null) {return;}
+        if (item == null) {return;}
         int hp = 0, def = 0, dmg = 0;
 
         // updates stats based on hp
         String category = mapTypeToCategory(item.getType());
         switch (category) {
             case "heal":
-                hp = item.getValue();
+                hp = Math.max(1,item.getValue());
                 user.addBonusHP(hp);
                 break;
             case "armour":
@@ -77,6 +77,7 @@ public class Inventory_UseItem_Interactor implements Inventory_InputBoundary_Use
         Inventory_UseItem_OutputData output = new Inventory_UseItem_OutputData(user.getInventory(), 0, 0, 0);
     outputBoundary.viewInventory(output);
     }
+
 
 
 }
