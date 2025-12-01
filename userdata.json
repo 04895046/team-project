@@ -1,7 +1,8 @@
 {
     "pathHistory": [
         0,
-        1
+        1,
+        0
     ],
     "user": {
         "DEF": 0,
@@ -9,13 +10,14 @@
         "bonusHP": 0,
         "HP": 28,
         "inventory": {
+            "itemsList": [],
             "items": [],
             "empty": true
         },
         "DMG": 8
     },
     "gameMap": {
-        "currentLocationIndex": 1,
+        "currentLocationIndex": 0,
         "locations": [
             {
                 "latitude": 43.6594,
