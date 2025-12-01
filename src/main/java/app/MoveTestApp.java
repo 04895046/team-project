@@ -21,12 +21,14 @@ import interface_adapter.results.ShowResultsController;
 import interface_adapter.results.ShowResultsPresenter;
 import use_case.Battle.BattleInteractor;
 import use_case.loadQuiz.LoadQuizInputBoundary;
+import use_case.loadQuiz.LoadQuizInputData;
 import use_case.loadQuiz.LoadQuizInteractor;
 import use_case.loadQuiz.LoadQuizOutputBoundary;
 import use_case.move.MoveInputBoundary;
 import use_case.move.MoveInteractor;
 import use_case.move.MoveOutputData;
 import use_case.quiz.SubmitQuizInputBoundary;
+import use_case.quiz.SubmitQuizInputData;
 import use_case.quiz.SubmitQuizInteractor;
 import use_case.quiz.SubmitQuizOutputBoundary;
 import use_case.show_results.ShowResultsInputBoundary;
@@ -67,14 +69,11 @@ public class MoveTestApp {
 
         BattleInteractor battleInteractor = new BattleInteractor(battleDataAccess, battlePresenter);
 
-        BattleController battleController = new BattleController(battleInteractor, quizViewModel);
-
-        BattleView battleView = new BattleView(battleViewModel);
-        battleView.setBattleController(battleController);
+        BattleView battleView = new BattleView(battleViewModel, quizViewModel);
 
         // Create Presenters
         LoadQuizOutputBoundary loadQuizPresenter = new LoadQuizPresenter(quizViewModel);
-        SubmitQuizOutputBoundary submitQuizPresenter = new QuizPresenter(quizViewModel, battleViewModel, viewManagerModel);
+        SubmitQuizOutputBoundary submitQuizPresenter = new SubmitQuizPresenter(quizViewModel, battleViewModel, viewManagerModel);
 
         // Create Interactors (Use Cases)
         LoadQuizInputBoundary loadQuizInteractor = new LoadQuizInteractor(repo, loadQuizPresenter);
@@ -82,7 +81,9 @@ public class MoveTestApp {
 
         // Create Controller (inject BOTH interactors)
         QuizController quizController = new QuizController(submitQuizInteractor, loadQuizInteractor);
+        BattleController battleController = new BattleController(battleInteractor, quizViewModel, quizController);
 
+        battleView.setBattleController(battleController);
         QuizView quizView = new QuizView(quizViewModel);
         quizView.setQuizController(quizController);
         new QuizzesReader().loadQuizzes(repo);
