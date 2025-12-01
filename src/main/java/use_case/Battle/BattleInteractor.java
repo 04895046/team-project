@@ -61,7 +61,6 @@ public class BattleInteractor implements BattleInputBoundary {
             List<Location> path = game.getPathHistory();
             if (path.size() > 1) {
                 path.remove(path.size() - 1);  // 移除当前位置
-                // 使用反射设置 currentLocationIndex
                 int previousIndex = path.size() - 1;
                 try {
                     java.lang.reflect.Field indexField = GameMap.class.getDeclaredField("currentLocationIndex");

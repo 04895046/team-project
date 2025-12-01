@@ -20,9 +20,10 @@ public class MoveInteractor implements MoveInputBoundary {
     public void execute(MoveInputData moveInputData) {
         Direction direction = moveInputData.getDirection();
         AdventureGame game = moveGameDataAccess.getGame();
+        this.moveGameDataAccess.saveGame(game);
         boolean success = game.move(direction);
-        if (success) {
-            this.moveGameDataAccess.saveGame(game);
+        if (!success) {
+            System.out.println("Warning! Move unsuccess!");
         }
 
         updateGame();
