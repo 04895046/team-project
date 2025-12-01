@@ -43,7 +43,6 @@ public class AppBuilder {
     private QuizViewModel quizViewModel;
     private ResultsView resultsView;
     private ResultsViewModel resultsViewModel;
-    // private ResultScreenView resultScreenView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -65,8 +64,8 @@ public class AppBuilder {
 
     public AppBuilder addOpenGameView() {
         openGameViewModel = new OpenGameViewModel();
-        // openGameView = new OpenGameView(openGameViewModel);
-        // cardPanel.add(quizView, quizView.getViewName());
+        openGameView = new OpenGameView(openGameViewModel);
+        cardPanel.add(openGameView, openGameView.getViewName());
         return this;
     }
 
@@ -81,13 +80,6 @@ public class AppBuilder {
         resultsViewModel = new ResultsViewModel();
         resultsView = new ResultsView(resultsViewModel);
         cardPanel.add(resultsView, resultsView.getViewName());
-        return this;
-    }
-
-    public AppBuilder addResultScreenView() {
-        resultsViewModel = new ResultsViewModel();
-        // resultScreenView = new ResultScreenView(resultsViewModel);
-        // cardPanel.add(resultScreenView, resultScreenView.getViewName());
         return this;
     }
 
