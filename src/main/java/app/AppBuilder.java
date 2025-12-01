@@ -3,10 +3,8 @@ package app;
 import API.GeoapifyStaticMap;
 import API.MoveStaticMapInterface;
 import data_access.FileGameDataAccessObject;
-import data_access.InMemoryBattleDataAccess;
 import data_access.InMemoryQuizDataAccessObject;
 import data_access.OpenGameFileDataAccess;
-import entity.*;
 import interface_adapter.Battle.BattleController;
 import interface_adapter.Battle.BattlePresenter;
 import interface_adapter.Battle.BattleViewModel;
@@ -34,7 +32,6 @@ import use_case.loadQuiz.LoadQuizOutputBoundary;
 import use_case.move.MoveInputBoundary;
 import use_case.move.MoveInteractor;
 import use_case.move.MoveOutputBoundary;
-import use_case.move.MoveOutputData;
 import use_case.openGame.*;
 import use_case.quiz.SubmitQuizInputBoundary;
 import use_case.quiz.SubmitQuizInteractor;
@@ -46,8 +43,6 @@ import view.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 public class AppBuilder {
     private final JPanel cardPanel = new JPanel();
@@ -61,7 +56,6 @@ public class AppBuilder {
 
     // DAO version using local file storage
     private final FileGameDataAccessObject gameDataAccess = new FileGameDataAccessObject();
-    private final InMemoryBattleDataAccess battleDataAccess = new InMemoryBattleDataAccess(gameDataAccess);
     private final InMemoryQuizDataAccessObject quizDataAccess = new InMemoryQuizDataAccessObject();
     private final OpenGameDataAccessInterface openGameDAO = new OpenGameFileDataAccess("userdata.json");
 
@@ -121,7 +115,7 @@ public class AppBuilder {
     public AppBuilder addBattleUseCase() {
         final BattleOutputBoundary battleOutputBoundary = new BattlePresenter(battleViewModel, viewManagerModel);
         final BattleInputBoundary battleInteractor = new BattleInteractor(
-                battleDataAccess, battleOutputBoundary);
+                gameDataAccess, battleOutputBoundary);
 
         BattleController controller = new BattleController(battleInteractor, quizViewModel);
         battleView.setBattleController(controller);
