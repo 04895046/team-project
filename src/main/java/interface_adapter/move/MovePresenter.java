@@ -57,6 +57,7 @@ public class MovePresenter implements MoveOutputBoundary {
         // Reset battle state for new battle
         battleState.setUser(user);
         battleState.setMonster(monster);
+        battleState.setNewBattleStarted(true);
         battleState.setBattleEnded(false);
         battleState.setUserWon(false);
         battleState.setBattleMessage("Battle is starting...");

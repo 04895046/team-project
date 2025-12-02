@@ -88,7 +88,7 @@ public class AppBuilder {
 
     public AppBuilder addBattleView() {
         battleViewModel = new BattleViewModel();
-        battleView = new BattleView(battleViewModel, quizViewModel, inventoryView);
+        battleView = new BattleView(battleViewModel, inventoryView);
         cardPanel.add(battleView, battleView.getViewName());
         return this;
     }
@@ -209,7 +209,7 @@ public class AppBuilder {
 
     public AppBuilder addUseInventoryUseCase() {
         final InventoryUseItemOutputBoundary inventoryUseItemPresenter = new InventoryUseItemPresenter(
-                inventoryUseItemViewModel);
+                inventoryUseItemViewModel, battleViewModel);
         final InventoryUseItemInputBoundary inventoryUseItemInteractor = new InventoryUseItemInteractor(
                 inventoryUseItemPresenter, gameDataAccess);
 

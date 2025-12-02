@@ -18,6 +18,7 @@ public class BattleState {
 
     private boolean quizResult = false;
     private boolean justFinishedQuiz = false;
+    private boolean newBattleStarted = false;
 
     // Monster getters and setters
     public Monster getMonster() {
@@ -106,4 +107,8 @@ public class BattleState {
     public void setJustFinishedQuiz(boolean justFinishedQuiz) {
         this.justFinishedQuiz = justFinishedQuiz;
     }
+
+    public boolean isNewBattleStarted() {return newBattleStarted;}
+
+    public void setNewBattleStarted(boolean newBattleStarted) {this.newBattleStarted = newBattleStarted;}
 }

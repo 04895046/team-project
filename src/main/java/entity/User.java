@@ -8,7 +8,7 @@ public class User {
     private double bonusHP = 0;
     private double DMG = 8;
     private double DEF = 0;
-    private Inventory inventory;
+    private final Inventory inventory;
 
     /**
      * The constructor for User class.
@@ -29,6 +29,13 @@ public class User {
      */
     public double getHP() {
         return HP;
+    }
+
+    /**
+     * The setter for HP.
+     */
+    public void setHP(double HP) {
+        this.HP = HP;
     }
 
     /**
@@ -86,19 +93,9 @@ public class User {
     public void addDMG(double dmg){DMG += dmg;}
 
     /**
-     * Decrease DMG, this method will be called when user unequip the weapon or change the weapon.
-     */
-    public void decreaseDMG(double dmg){DMG -= dmg;}
-
-    /**
      * Add DEF, this method will be called when user equip the armour or change the armour.
      */
     public void addDEF(double def){DEF += def;}
-
-    /**
-     * Decrease DEF, this method will be called when user unequip the armour or change the armour.
-     */
-    public void decreaseDEF(double def){DEF -= def;}
 
     /**
      * add item to user's inventory, method called when item is picked up by user
@@ -109,35 +106,11 @@ public class User {
     }
 
     /**
-     * remove item from inventory, method will be called when item is used by user
-     *
-     */
-    public void removeItem(Item item){
-        inventory.removeItem(item);
-    }
-
-    /**
-     *
-     * Find an item by its name
-     */
-    public Item getItemByName(String name) {
-        return inventory.getItemByName(name);
-    }
-
-    /**
      *
      * @return inventory of the user
      */
     public Inventory getInventory() {
         return inventory;
-    }
-
-    /**
-     *
-     * @return boolean whether the inventory contains any items
-     */
-    public boolean hasItems() {
-    return !inventory.getItems().isEmpty();
     }
 
     /**

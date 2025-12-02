@@ -73,13 +73,17 @@ public class MoveView extends JPanel implements PropertyChangeListener {
         this.add(currentLocationLabel);
         this.add(buttonPanel);
 
-        goLeftButton.addActionListener(
-                e -> moveController.execute(Direction.LEFT)
-        );
+        goLeftButton.addActionListener(e -> {
+            MoveState state = moveViewModel.getState();
+            state.setJustReturnedFromDefeat(false);
+            moveController.execute(Direction.LEFT);
+        });
 
-        goRightButton.addActionListener(
-                e -> moveController.execute(Direction.RIGHT)
-        );
+        goRightButton.addActionListener(e -> {
+            MoveState state = moveViewModel.getState();
+            state.setJustReturnedFromDefeat(false);
+            moveController.execute(Direction.RIGHT);
+        });
 
         pickUpButton.addActionListener(
                 e -> {
@@ -103,7 +107,6 @@ public class MoveView extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("DEBUG: MoveView.propertyChange triggered, property = " + evt.getPropertyName());
         if ("state".equals(evt.getPropertyName())) {
             MoveState state = (MoveState) evt.getNewValue();
 

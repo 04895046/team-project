@@ -1,5 +1,7 @@
 package interface_adapter.InventoryUseItem;
 
+import interface_adapter.Battle.BattleState;
+import interface_adapter.Battle.BattleViewModel;
 import use_case.InventoryUseItem.InventoryUseItemOutputData;
 import use_case.InventoryUseItem.InventoryUseItemOutputBoundary;
 import use_case.InventoryUseItem.InventoryUseItemOutputData.ItemDTO;
@@ -9,9 +11,11 @@ import java.util.List;
 
 public class InventoryUseItemPresenter implements InventoryUseItemOutputBoundary {
     private final InventoryUseItemViewModel viewModel;
+    private final BattleViewModel battleViewModel;
 
-    public InventoryUseItemPresenter(InventoryUseItemViewModel viewModel) {
+    public InventoryUseItemPresenter(InventoryUseItemViewModel viewModel, BattleViewModel battleViewModel) {
         this.viewModel = viewModel;
+        this.battleViewModel = battleViewModel;
     }
 
     @Override
@@ -62,6 +66,16 @@ public class InventoryUseItemPresenter implements InventoryUseItemOutputBoundary
 
         state.setMessage(message.toString());
         viewModel.firePropertyChange();
+
+        if (battleViewModel != null) {
+            BattleState battleState = battleViewModel.getState();
+            if (battleState.getUser() != null) {
+                double newHp = battleState.getUserHp() + outputData.getHpIncrease();
+                battleState.setUserHP(newHp);
+                battleState.getUser().setHP(newHp);
+                battleViewModel.firePropertyChange();
+            }
+        }
     }
 
     @Override
