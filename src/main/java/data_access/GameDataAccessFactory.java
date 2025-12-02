@@ -3,7 +3,7 @@ package data_access;
 import use_case.Battle.BattleUserDataAccessInterface;
 import use_case.move.MoveGameDataAccessInterface;
 import use_case.openGame.OpenGameDataAccessInterface;
-import use_case.quiz.QuizDataAccessInterface;
+import use_case.submitQuiz.QuizDataAccessInterface;
 import use_case.show_results.ShowResultsGameDataAccessInterface;
 
 /**
