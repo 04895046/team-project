@@ -2,7 +2,7 @@ package view;
 
 import entity.Direction;
 import entity.Item;
-import interface_adapter.InventoryAddItem.InventoryAddItem_Controller;
+import interface_adapter.InventoryAddItem.InventoryAddItemController;
 import interface_adapter.move.MoveController;
 import interface_adapter.move.MoveState;
 import interface_adapter.move.MoveViewModel;
@@ -20,7 +20,7 @@ public class MoveView extends JPanel implements PropertyChangeListener {
     private final MoveViewModel moveViewModel;
     private MoveController moveController;
     private ShowResultsController resultsController;
-    private InventoryAddItem_Controller inventoryAddItemController;
+    private InventoryAddItemController inventoryAddItemController;
 
     private final JLabel linearMapLabel;
     private final JLabel staticMapImageLabel;
@@ -145,7 +145,7 @@ public class MoveView extends JPanel implements PropertyChangeListener {
         this.resultsController = resultsController;
     }
 
-    public void setInventoryAddItemController(InventoryAddItem_Controller inventoryAddItemController) {
+    public void setInventoryAddItemController(InventoryAddItemController inventoryAddItemController) {
         this.inventoryAddItemController = inventoryAddItemController;
     }
 }

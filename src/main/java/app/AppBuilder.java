@@ -7,9 +7,11 @@ import data_access.QuizzesReader;
 import interface_adapter.Battle.BattleController;
 import interface_adapter.Battle.BattlePresenter;
 import interface_adapter.Battle.BattleViewModel;
-import interface_adapter.InventoryAddItem.InventoryAddItem_Controller;
-import interface_adapter.InventoryAddItem.InventoryAddItem_Presenter;
-import interface_adapter.InventoryAddItem.InventoryAddItem_ViewModel;
+import interface_adapter.InventoryAddItem.InventoryAddItemController;
+import interface_adapter.InventoryAddItem.InventoryAddItemPresenter;
+import interface_adapter.InventoryAddItem.InventoryAddItemViewModel;
+import interface_adapter.InventoryUseItem.InventoryUseItemPresenter;
+import interface_adapter.InventoryUseItem.InventoryUseItemViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.move.MoveController;
 import interface_adapter.move.MovePresenter;
@@ -24,9 +26,12 @@ import interface_adapter.results.ShowResultsPresenter;
 import use_case.Battle.BattleInputBoundary;
 import use_case.Battle.BattleInteractor;
 import use_case.Battle.BattleOutputBoundary;
-import use_case.Inventory_AddItem.Inventory_AddItem_Interactor;
-import use_case.Inventory_AddItem.Inventory_AddItem_OutputBoundary;
-import use_case.Inventory_AddItem.Inventory_InputBoundary_AddItem;
+import use_case.InventoryAddItem.InventoryAddItemInputBoundary;
+import use_case.InventoryAddItem.InventoryAddItemInteractor;
+import use_case.InventoryAddItem.InventoryAddItemOutputBoundary;
+import use_case.InventoryUseItem.InventoryUseItemInputBoundary;
+import use_case.InventoryUseItem.InventoryUseItemInteractor;
+import use_case.InventoryUseItem.InventoryUseItemOutputBoundary;
 import use_case.loadQuiz.LoadQuizInputBoundary;
 import use_case.loadQuiz.LoadQuizInteractor;
 import use_case.loadQuiz.LoadQuizOutputBoundary;
@@ -34,9 +39,9 @@ import use_case.move.MoveInputBoundary;
 import use_case.move.MoveInteractor;
 import use_case.move.MoveOutputBoundary;
 import use_case.openGame.*;
-import use_case.quiz.SubmitQuizInputBoundary;
-import use_case.quiz.SubmitQuizInteractor;
-import use_case.quiz.SubmitQuizOutputBoundary;
+import use_case.submitQuiz.SubmitQuizInputBoundary;
+import use_case.submitQuiz.SubmitQuizInteractor;
+import use_case.submitQuiz.SubmitQuizOutputBoundary;
 import use_case.show_results.ShowResultsInputBoundary;
 import use_case.show_results.ShowResultsInteractor;
 import use_case.show_results.ShowResultsOutputBoundary;
@@ -71,6 +76,10 @@ public class AppBuilder {
     private QuizViewModel quizViewModel;
     private ResultsView resultsView;
     private ResultsViewModel resultsViewModel;
+    private ItemView itemView;
+    private InventoryAddItemViewModel inventoryAddItemViewModel;
+    private InventoryView inventoryView;
+    private InventoryUseItemViewModel inventoryUseItemViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -108,6 +117,20 @@ public class AppBuilder {
         resultsViewModel = new ResultsViewModel();
         resultsView = new ResultsView(resultsViewModel);
         cardPanel.add(resultsView, resultsView.getViewName());
+        return this;
+    }
+
+    public AppBuilder addAddInventoryView() {
+        inventoryAddItemViewModel = new InventoryAddItemViewModel();
+        itemView = new ItemView(inventoryAddItemViewModel);
+        cardPanel.add(itemView, itemView.getViewName());
+        return this;
+    }
+
+    public AppBuilder addUseInventoryView() {
+        inventoryUseItemViewModel = new InventoryUseItemViewModel();
+        inventoryView = new InventoryView(inventoryUseItemViewModel);
+        cardPanel.add(inventoryView, inventoryView.getViewName());
         return this;
     }
 
@@ -171,14 +194,24 @@ public class AppBuilder {
         return this;
     }
 
-    public AppBuilder addInventoryAddItemUseCase() {
-        InventoryAddItem_ViewModel inventoryAddItemViewModel = new InventoryAddItem_ViewModel();
-        Inventory_AddItem_OutputBoundary inventoryAddItemOutputBoundary = new InventoryAddItem_Presenter(inventoryAddItemViewModel, moveViewModel);
-        Inventory_InputBoundary_AddItem inventoryAddItemInteractor = new Inventory_AddItem_Interactor(
-                inventoryAddItemOutputBoundary, gameDataAccess);
+    public AppBuilder addAddInventoryUseCase() {
+        final InventoryAddItemOutputBoundary inventoryAddItemOutputBoundary = new InventoryAddItemPresenter(
+                inventoryAddItemViewModel, moveViewModel);
+        final InventoryAddItemInputBoundary inventoryAddItemInteractor = new InventoryAddItemInteractor(inventoryAddItemOutputBoundary, gameDataAccess);
 
-        InventoryAddItem_Controller inventoryAddItemController = new InventoryAddItem_Controller(inventoryAddItemInteractor);
-        moveView.setInventoryAddItemController(inventoryAddItemController);
+        InventoryAddItemController controller = new InventoryAddItemController(inventoryAddItemInteractor);
+        itemView.setController(controller);
+        moveView.setInventoryAddItemController(controller);
+        return this;
+    }
+
+    public AppBuilder addUseInventoryUseCase() {
+        final InventoryUseItemOutputBoundary inventoryUseItemPresenter = new InventoryUseItemPresenter();
+        final InventoryUseItemInputBoundary inventoryUseItemInteractor = new InventoryUseItemInteractor(
+                inventoryUseItemPresenter);
+
+        // InventoryUseItemController controller = new InventoryUseItemController();
+        // inventoryView.setController(controller);
         return this;
     }
 

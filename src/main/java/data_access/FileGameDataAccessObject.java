@@ -2,10 +2,10 @@ package data_access;
 
 import entity.*;
 import use_case.Battle.BattleUserDataAccessInterface;
-import use_case.Inventory_AddItem.Inventory_AddItemUserDataAccessInterface;
+import use_case.InventoryAddItem.InventoryAddItemUserDataAccessInterface;
 import use_case.move.MoveGameDataAccessInterface;
 import use_case.openGame.OpenGameDataAccessInterface;
-import use_case.quiz.QuizDataAccessInterface;
+import use_case.submitQuiz.QuizDataAccessInterface;
 import use_case.show_results.ShowResultsGameDataAccessInterface;
 
 import java.io.File;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class FileGameDataAccessObject implements MoveGameDataAccessInterface,
         ShowResultsGameDataAccessInterface, BattleUserDataAccessInterface,
-        QuizDataAccessInterface, OpenGameDataAccessInterface, Inventory_AddItemUserDataAccessInterface {
+        QuizDataAccessInterface, OpenGameDataAccessInterface, InventoryAddItemUserDataAccessInterface {
 
     private AdventureGame game;
     private final FileDataAccess fileDataAccess;
