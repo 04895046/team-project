@@ -2,8 +2,13 @@ package app;
 
 import API.GeoapifyStaticMap;
 import API.MoveStaticMapInterface;
-import data_access.FileGameDataAccessObject;
+import data_access.GameDataAccessFactory;
 import data_access.QuizzesReader;
+import use_case.Battle.BattleUserDataAccessInterface;
+import use_case.move.MoveGameDataAccessInterface;
+import use_case.openGame.OpenGameDataAccessInterface;
+import use_case.quiz.QuizDataAccessInterface;
+import use_case.show_results.ShowResultsGameDataAccessInterface;
 import interface_adapter.Battle.BattleController;
 import interface_adapter.Battle.BattlePresenter;
 import interface_adapter.Battle.BattleViewModel;
@@ -46,14 +51,15 @@ public class AppBuilder {
     final ViewManagerModel viewManagerModel = new ViewManagerModel();
     ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
-    // set which data access implementation to use, can be any
-    // of the classes from the data_access package
+    // Factory for creating data access objects - supports dependency injection
+    private final GameDataAccessFactory dataAccessFactory;
 
-    // DAO version using local file storage
-    private final FileGameDataAccessObject gameDataAccess = new FileGameDataAccessObject();
-
-    // DAO version using a shared external database
-    // final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(userFactory);
+    // Data access objects created by the factory
+    private final MoveGameDataAccessInterface gameDataAccess;
+    private final BattleUserDataAccessInterface battleDataAccess;
+    private final QuizDataAccessInterface quizDataAccess;
+    private final ShowResultsGameDataAccessInterface resultsDataAccess;
+    private final OpenGameDataAccessInterface openGameDataAccess;
 
     private BattleView battleView;
     private BattleViewModel battleViewModel;
@@ -66,7 +72,20 @@ public class AppBuilder {
     private ResultsView resultsView;
     private ResultsViewModel resultsViewModel;
 
-    public AppBuilder() {
+    /**
+     * Creates an AppBuilder with the specified data access factory.
+     * This constructor follows Dependency Inversion Principle by accepting
+     * a factory interface rather than concrete implementations.
+     *
+     * @param dataAccessFactory The factory to create data access objects
+     */
+    public AppBuilder(GameDataAccessFactory dataAccessFactory) {
+        this.dataAccessFactory = dataAccessFactory;
+        this.gameDataAccess = dataAccessFactory.createGameDataAccess();
+        this.battleDataAccess = dataAccessFactory.createBattleDataAccess();
+        this.quizDataAccess = dataAccessFactory.createQuizDataAccess();
+        this.resultsDataAccess = dataAccessFactory.createResultsDataAccess();
+        this.openGameDataAccess = dataAccessFactory.createOpenGameDataAccess();
         cardPanel.setLayout(cardLayout);
     }
 
@@ -86,7 +105,7 @@ public class AppBuilder {
 
     public AppBuilder addOpenGameView() {
         openGameViewModel = new OpenGameViewModel();
-        openGameView = new OpenGameView(openGameViewModel);
+        openGameView = new OpenGameView(open);
         cardPanel.add(openGameView, openGameView.getViewName());
         return this;
     }
@@ -108,7 +127,7 @@ public class AppBuilder {
     public AppBuilder addBattleUseCase() {
         final BattleOutputBoundary battleOutputBoundary = new BattlePresenter(battleViewModel, moveViewModel, viewManagerModel);
         final BattleInputBoundary battleInteractor = new BattleInteractor(
-                gameDataAccess, battleOutputBoundary);
+                battleDataAccess, battleOutputBoundary);
 
         BattleController controller = new BattleController(battleInteractor, quizViewModel);
         battleView.setBattleController(controller);
@@ -131,7 +150,7 @@ public class AppBuilder {
         final ScreenSwitchBoundary openGameScreenSwitcher = new OpenGameScreenSwitcher(viewManagerModel);
         final OpenGameOutputBoundary openGameOutputBoundary = new OpenGamePresenter(
                 openGameViewModel, viewManagerModel);
-        final OpenGameInputBoundary openGameInteractor = new OpenGameInteractor(openGameOutputBoundary, gameDataAccess ,
+        final OpenGameInputBoundary openGameInteractor = new OpenGameInteractor(openGameOutputBoundary, openGameDataAccess,
                 openGameScreenSwitcher);
 
         OpenGameController controller = new OpenGameController(openGameInteractor);
@@ -142,15 +161,15 @@ public class AppBuilder {
     public AppBuilder addQuizUseCase() {
         final LoadQuizOutputBoundary loadQuizOutputBoundary = new LoadQuizPresenter(quizViewModel);
         final LoadQuizInputBoundary loadQuizInteractor = new LoadQuizInteractor(
-                gameDataAccess, loadQuizOutputBoundary);
+                quizDataAccess, loadQuizOutputBoundary);
         final SubmitQuizOutputBoundary submitQuizOutputBoundary = new SubmitQuizPresenter(
                 quizViewModel, battleViewModel, viewManagerModel);
         final SubmitQuizInputBoundary submitQuizInteractor = new SubmitQuizInteractor(
-                gameDataAccess, submitQuizOutputBoundary);
+                quizDataAccess, submitQuizOutputBoundary);
 
         QuizController controller = new QuizController(submitQuizInteractor, loadQuizInteractor);
         quizView.setQuizController(controller);
-        new QuizzesReader().loadQuizzes(gameDataAccess);
+        new QuizzesReader().loadQuizzes(quizDataAccess);
         QuizState quizState = new QuizState();
         quizView.loadQuiz(quizState.setQuizId());
         return this;
@@ -159,7 +178,7 @@ public class AppBuilder {
     public AppBuilder addResultsUseCase() {
         final ShowResultsOutputBoundary showResultsOutputBoundary = new ShowResultsPresenter(resultsViewModel, moveViewModel, viewManagerModel);
         final ShowResultsInputBoundary showResultsInteractor = new ShowResultsInteractor(
-                gameDataAccess, showResultsOutputBoundary);
+                resultsDataAccess, showResultsOutputBoundary);
 
         ShowResultsController controller = new ShowResultsController(showResultsInteractor);
         moveView.setResultController(controller);

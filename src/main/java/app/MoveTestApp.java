@@ -58,6 +58,9 @@ public class MoveTestApp {
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         OpenGameViewModel openGameViewModel = new OpenGameViewModel();
 
+        MoveViewModel moveViewModel = new MoveViewModel();
+
+
         BattleViewModel battleViewModel = new BattleViewModel();
         QuizViewModel quizViewModel = new QuizViewModel();
         InMemoryQuizDataAccessObject repo = new InMemoryQuizDataAccessObject();
@@ -85,13 +88,13 @@ public class MoveTestApp {
         FileGameDataAccessObject gameDataAccess = new FileGameDataAccessObject();
         System.out.println(gameDataAccess.getGame().getUser().getHP());
 
-        BattlePresenter battlePresenter = new BattlePresenter(battleViewModel, viewManagerModel);
+        BattlePresenter battlePresenter = new BattlePresenter(battleViewModel, moveViewModel, viewManagerModel);
 
         BattleInteractor battleInteractor = new BattleInteractor(gameDataAccess, battlePresenter);
 
         BattleController battleController = new BattleController(battleInteractor, quizViewModel);
 
-        BattleView battleView = new BattleView(battleViewModel);
+        BattleView battleView = new BattleView(battleViewModel, quizViewModel);
         battleView.setBattleController(battleController);
 
         // Create Presenters
@@ -111,7 +114,6 @@ public class MoveTestApp {
         QuizState quizState = new QuizState();
         quizView.loadQuiz(quizState.setQuizId());
 
-        MoveViewModel moveViewModel = new MoveViewModel();
         ResultsViewModel resultsViewModel = new ResultsViewModel();
 
         MoveStaticMapInterface mapService = new GeoapifyStaticMap();
