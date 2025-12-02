@@ -69,7 +69,7 @@ public class MoveTestApp {
         MoveViewModel moveViewModel = new MoveViewModel();
 
         OpenGameOutputBoundary openGamePresenter =
-                new OpenGamePresenter(openGameViewModel, viewManagerModel);
+                new OpenGamePresenter(openGameViewModel, moveViewModel, viewManagerModel);
 
         OpenGameDataAccessInterface openGameDAO =
                 new OpenGameFileDataAccess("userdata.json");
@@ -166,12 +166,13 @@ public class MoveTestApp {
             Location loc = initialGame.getGameMap().getCurrentLocation();
             User user = initialGame.getUser();
             Monster mon = loc.getMonster();
+            Item item = loc.getItem();
             int index = initialGame.getGameMap().getCurrentLocationIndex();
             int size = initialGame.getGameMap().getMapSize();
 
             MoveOutputData initialOutputData = new MoveOutputData(
                     loc.getName(), loc.getLatitude(), loc.getLongitude(),
-                    index, size, canMoveLeft, canMoveRight, mon
+                    index, size, canMoveLeft, canMoveRight, mon, item
             );
             movePresenter.present(initialOutputData);
 

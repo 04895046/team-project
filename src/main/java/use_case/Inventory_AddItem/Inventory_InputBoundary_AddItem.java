@@ -9,11 +9,6 @@ import entity.User;
 public interface Inventory_InputBoundary_AddItem {
 
     /**
-     * set user
-     */
-    void setUser(User user);
-
-    /**
      * To be used by Inventory_AddItem_Interactor;
      * @param inputData item to be added to inventory
      */

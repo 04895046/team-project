@@ -18,6 +18,7 @@ public class Main {
                 .addBattleUseCase()
                 .addQuizUseCase()
                 .addResultsUseCase()
+                .addInventoryAddItemUseCase()
                 .build();
 
         application.pack();

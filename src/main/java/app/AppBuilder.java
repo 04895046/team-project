@@ -7,6 +7,9 @@ import data_access.QuizzesReader;
 import interface_adapter.Battle.BattleController;
 import interface_adapter.Battle.BattlePresenter;
 import interface_adapter.Battle.BattleViewModel;
+import interface_adapter.InventoryAddItem.InventoryAddItem_Controller;
+import interface_adapter.InventoryAddItem.InventoryAddItem_Presenter;
+import interface_adapter.InventoryAddItem.InventoryAddItem_ViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.move.MoveController;
 import interface_adapter.move.MovePresenter;
@@ -21,6 +24,9 @@ import interface_adapter.results.ShowResultsPresenter;
 import use_case.Battle.BattleInputBoundary;
 import use_case.Battle.BattleInteractor;
 import use_case.Battle.BattleOutputBoundary;
+import use_case.Inventory_AddItem.Inventory_AddItem_Interactor;
+import use_case.Inventory_AddItem.Inventory_AddItem_OutputBoundary;
+import use_case.Inventory_AddItem.Inventory_InputBoundary_AddItem;
 import use_case.loadQuiz.LoadQuizInputBoundary;
 import use_case.loadQuiz.LoadQuizInteractor;
 import use_case.loadQuiz.LoadQuizOutputBoundary;
@@ -129,7 +135,7 @@ public class AppBuilder {
 
     public AppBuilder addOpenGameUseCase() {
         final OpenGameOutputBoundary openGameOutputBoundary = new OpenGamePresenter(
-                openGameViewModel, viewManagerModel);
+                openGameViewModel, moveViewModel, viewManagerModel);
         final OpenGameInputBoundary openGameInteractor = new OpenGameInteractor(openGameOutputBoundary, gameDataAccess);
 
         OpenGameController controller = new OpenGameController(openGameInteractor);
@@ -162,6 +168,17 @@ public class AppBuilder {
         ShowResultsController controller = new ShowResultsController(showResultsInteractor);
         moveView.setResultController(controller);
         resultsView.setResultController(controller);
+        return this;
+    }
+
+    public AppBuilder addInventoryAddItemUseCase() {
+        InventoryAddItem_ViewModel inventoryAddItemViewModel = new InventoryAddItem_ViewModel();
+        Inventory_AddItem_OutputBoundary inventoryAddItemOutputBoundary = new InventoryAddItem_Presenter(inventoryAddItemViewModel, moveViewModel);
+        Inventory_InputBoundary_AddItem inventoryAddItemInteractor = new Inventory_AddItem_Interactor(
+                inventoryAddItemOutputBoundary, gameDataAccess);
+
+        InventoryAddItem_Controller inventoryAddItemController = new InventoryAddItem_Controller(inventoryAddItemInteractor);
+        moveView.setInventoryAddItemController(inventoryAddItemController);
         return this;
     }
 
