@@ -1,37 +1,33 @@
 package interface_adapter.InventoryUseItem;
 
-import use_case.Inventory_UseItem.Inventory_UseItem_OutputData;
-import use_case.Inventory_UseItem.Inventory_UseItem_OutputBoundary;
 import entity.Item;
-import entity.Inventory;
+import use_case.Inventory_UseItem.Inventory_UseItem_OutputData;
 
-public class InventoryUseItem_Presenter implements Inventory_UseItem_OutputBoundary {
+import java.util.ArrayList;
+import java.util.List;
 
-    @Override
-    public void useItem(Inventory_UseItem_OutputData outputData) {
-        Inventory inventory = outputData.getInventory();
-        int hp = outputData.getHpIncrease();
-        int def = outputData.getDefIncrease();
-        int dmg = outputData.getDmgIncrease();
+public class InventoryUseItem_Presenter extends InventoryUseItem_ViewModel {
+    private final InventoryUseItem_ViewModel viewModel;
 
-        // test lines
-        //System.out.print("Item used, has enhanced " );
-        //if (hp > 0) { System.out.println("hp: " + hp); }
-        //if (def > 0) { System.out.println("def: " + def); }
-        //if (dmg > 0) { System.out.println("dmg: " + dmg); }
-
-        //System.out.print("Item removed. Inventory has reduced to contain " );
-        //for (Item item : items) {
-          //  System.out.println("-" + item.getName() + "(" + item.getType() + ")"); }
+    public InventoryUseItem_Presenter(InventoryUseItem_ViewModel viewModel) {
+        this.viewModel = viewModel;
     }
+// Inventory_UseItem_OutputData
+    public void useItem(Inventory_UseItem_OutputData outputData) {
+        InventoryUseItem_State state = viewModel.getState();
 
-    @Override
-    public void viewInventory(Inventory_UseItem_OutputData outputData) {
-        Inventory inventory = outputData.getInventory();
+        state.setHpIncrease(outputData.getHpIncrease());
+        state.setDefIncrease(outputData.getDefIncrease());
+        state.setDmgIncrease(outputData.getDmgIncrease());
 
-        // test lines
-        // System.out.print("Inventory contains: " );
-        // for (Item item : inventory) {
-        //    System.out.println("-" + item.getName() + "(" + item.getType() + ")"); }
+        List<String> names = new ArrayList<>();
+        for (Item item : outputData.getInventory().getItems()) {
+            names.add(item.getName());
+        }
+        state.setItemNames(names);
+
+        state.setMessage("Item used!");
+
+        viewModel.firePropertyChange();
     }
 }
