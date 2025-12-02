@@ -4,16 +4,22 @@ import API.GeoapifyStaticMap;
 import API.MoveStaticMapInterface;
 import data_access.FileGameDataAccessObject;
 import data_access.QuizzesReader;
+import entity.Inventory;
 import interface_adapter.Battle.BattleController;
 import interface_adapter.Battle.BattlePresenter;
 import interface_adapter.Battle.BattleViewModel;
+import interface_adapter.InventoryAddItem.InventoryAddItemController;
+import interface_adapter.InventoryAddItem.InventoryAddItemPresenter;
+import interface_adapter.InventoryAddItem.InventoryAddItemViewModel;
+import interface_adapter.InventoryUseItem.InventoryUseItemController;
+import interface_adapter.InventoryUseItem.InventoryUseItemPresenter;
+import interface_adapter.InventoryUseItem.InventoryUseItemViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.move.MoveController;
 import interface_adapter.move.MovePresenter;
 import interface_adapter.move.MoveViewModel;
 import interface_adapter.opengame.OpenGameController;
 import interface_adapter.opengame.OpenGamePresenter;
-import interface_adapter.opengame.OpenGameScreenSwitcher;
 import interface_adapter.opengame.OpenGameViewModel;
 import interface_adapter.quiz.*;
 import interface_adapter.results.ResultsViewModel;
@@ -22,6 +28,12 @@ import interface_adapter.results.ShowResultsPresenter;
 import use_case.Battle.BattleInputBoundary;
 import use_case.Battle.BattleInteractor;
 import use_case.Battle.BattleOutputBoundary;
+import use_case.InventoryAddItem.InventoryAddItemInputBoundary;
+import use_case.InventoryAddItem.InventoryAddItemInteractor;
+import use_case.InventoryAddItem.InventoryAddItemOutputBoundary;
+import use_case.InventoryUseItem.InventoryUseItemInputBoundary;
+import use_case.InventoryUseItem.InventoryUseItemInteractor;
+import use_case.InventoryUseItem.InventoryUseItemOutputBoundary;
 import use_case.loadQuiz.LoadQuizInputBoundary;
 import use_case.loadQuiz.LoadQuizInteractor;
 import use_case.loadQuiz.LoadQuizOutputBoundary;
@@ -29,9 +41,9 @@ import use_case.move.MoveInputBoundary;
 import use_case.move.MoveInteractor;
 import use_case.move.MoveOutputBoundary;
 import use_case.openGame.*;
-import use_case.quiz.SubmitQuizInputBoundary;
-import use_case.quiz.SubmitQuizInteractor;
-import use_case.quiz.SubmitQuizOutputBoundary;
+import use_case.submitQuiz.SubmitQuizInputBoundary;
+import use_case.submitQuiz.SubmitQuizInteractor;
+import use_case.submitQuiz.SubmitQuizOutputBoundary;
 import use_case.show_results.ShowResultsInputBoundary;
 import use_case.show_results.ShowResultsInteractor;
 import use_case.show_results.ShowResultsOutputBoundary;
@@ -66,6 +78,10 @@ public class AppBuilder {
     private QuizViewModel quizViewModel;
     private ResultsView resultsView;
     private ResultsViewModel resultsViewModel;
+    private ItemView itemView;
+    private InventoryAddItemViewModel inventoryAddItemViewModel;
+    private InventoryView inventoryView;
+    private InventoryUseItemViewModel inventoryUseItemViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -106,6 +122,20 @@ public class AppBuilder {
         return this;
     }
 
+    public AppBuilder addAddInventoryView() {
+        inventoryAddItemViewModel = new InventoryAddItemViewModel();
+        itemView = new ItemView(inventoryAddItemViewModel);
+        cardPanel.add(itemView, itemView.getViewName());
+        return this;
+    }
+
+    public AppBuilder addUseInventoryView() {
+        inventoryUseItemViewModel = new InventoryUseItemViewModel();
+        inventoryView = new InventoryView(inventoryUseItemViewModel);
+        cardPanel.add(inventoryView, inventoryView.getViewName());
+        return this;
+    }
+
     public AppBuilder addBattleUseCase() {
         final BattleOutputBoundary battleOutputBoundary = new BattlePresenter(battleViewModel, moveViewModel, viewManagerModel);
         final BattleInputBoundary battleInteractor = new BattleInteractor(
@@ -129,11 +159,9 @@ public class AppBuilder {
     }
 
     public AppBuilder addOpenGameUseCase() {
-        final ScreenSwitchBoundary openGameScreenSwitcher = new OpenGameScreenSwitcher(moveViewModel, viewManagerModel);
         final OpenGameOutputBoundary openGameOutputBoundary = new OpenGamePresenter(
                 openGameViewModel, viewManagerModel);
-        final OpenGameInputBoundary openGameInteractor = new OpenGameInteractor(openGameOutputBoundary, gameDataAccess,
-                openGameScreenSwitcher);
+        final OpenGameInputBoundary openGameInteractor = new OpenGameInteractor(openGameOutputBoundary, gameDataAccess);
 
         OpenGameController controller = new OpenGameController(openGameInteractor);
         openGameView.setOpenGameController(controller);
@@ -165,6 +193,25 @@ public class AppBuilder {
         ShowResultsController controller = new ShowResultsController(showResultsInteractor);
         moveView.setResultController(controller);
         resultsView.setResultController(controller);
+        return this;
+    }
+
+    public AppBuilder addAddInventoryUseCase() {
+        final InventoryAddItemOutputBoundary inventoryAddItemOutputBoundary = new InventoryAddItemPresenter(
+                inventoryAddItemViewModel);
+        final InventoryAddItemInputBoundary inventoryAddItemInteractor = new InventoryAddItemInteractor(inventoryAddItemOutputBoundary);
+
+        InventoryAddItemController controller = new InventoryAddItemController(inventoryAddItemInteractor);
+        itemView.setController(controller);
+        return this;
+    }
+    public AppBuilder addUseInventoryUseCase() {
+        final InventoryUseItemOutputBoundary inventoryUseItemPresenter = new InventoryUseItemPresenter();
+        final InventoryUseItemInputBoundary inventoryUseItemInteractor = new InventoryUseItemInteractor(
+                inventoryUseItemPresenter);
+
+        // InventoryUseItemController controller = new InventoryUseItemController();
+        // inventoryView.setController(controller);
         return this;
     }
 

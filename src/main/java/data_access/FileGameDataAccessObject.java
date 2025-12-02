@@ -4,7 +4,7 @@ import entity.*;
 import use_case.Battle.BattleUserDataAccessInterface;
 import use_case.move.MoveGameDataAccessInterface;
 import use_case.openGame.OpenGameDataAccessInterface;
-import use_case.quiz.QuizDataAccessInterface;
+import use_case.submitQuiz.QuizDataAccessInterface;
 import use_case.show_results.ShowResultsGameDataAccessInterface;
 
 import java.io.File;
@@ -118,34 +118,6 @@ public class FileGameDataAccessObject implements MoveGameDataAccessInterface,
     }
 
     // ==================== OpenGameDataAccessInterface ====================
-
-    @Override
-    public GameState loadGame() {
-        if (this.game != null) {
-            String currentLocation = game.getGameMap().getCurrentLocation().getName();
-            String finalDestination = currentLocation;
-
-            try {
-                Field locationsField = GameMap.class.getDeclaredField("locations");
-                locationsField.setAccessible(true);
-                @SuppressWarnings("unchecked")
-                List<Location> locations = (List<Location>) locationsField.get(game.getGameMap());
-                if (!locations.isEmpty()) {
-                    finalDestination = locations.get(locations.size() - 1).getName();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return new GameState(currentLocation, finalDestination);
-        }
-        return null;
-    }
-
-    @Override
-    public void saveGame(GameState state) {
-
-    }
 
     @Override
     public boolean saveFileExists() {
