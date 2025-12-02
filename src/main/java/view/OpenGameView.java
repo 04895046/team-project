@@ -10,17 +10,15 @@ public class OpenGameView extends JPanel {
 
     private final String viewName = "OpenGame";
 
-    private final OpenGameController controller;
+    private OpenGameController controller;
     private final OpenGameViewModel viewModel;
 
     private final JButton newGameButton = new JButton("Start New Game");
     private final JButton continueGameButton = new JButton("Continue Game");
     private final JLabel messageLabel = new JLabel("Welcome!", SwingConstants.CENTER);
 
-    public OpenGameView(OpenGameController controller,
-                        OpenGameViewModel viewModel) {
-
-        this.controller = controller;
+    public OpenGameView(OpenGameViewModel viewModel) {
+        this.controller = null;
         this.viewModel = viewModel;
 
         // Listen to ViewModel updates
@@ -36,7 +34,8 @@ public class OpenGameView extends JPanel {
         continueGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Buttons
-        newGameButton.addActionListener(e -> controller.startNewGame());
+//        newGameButton.addActionListener(e -> controller.startNewGame());
+        newGameButton.addActionListener(e -> onStartNewGame());
         continueGameButton.addActionListener(e -> controller.continueGame());
 
         add(Box.createRigidArea(new Dimension(0, 20)));
@@ -48,6 +47,9 @@ public class OpenGameView extends JPanel {
 
         add(continueGameButton);
     }
+    private void onStartNewGame() {
+        controller.startNewGame();
+    }
 
     private void updateView() {
         messageLabel.setText(viewModel.getMessage());
@@ -55,5 +57,9 @@ public class OpenGameView extends JPanel {
 
     public String getViewName() {
         return viewName;
+    }
+
+    public void setOpenGameController(OpenGameController openGameController) {
+        this.controller = openGameController;
     }
 }

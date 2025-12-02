@@ -18,6 +18,8 @@ public class Main {
                 .addMoveView()
                 .addOpenGameView()
                 .addResultsView()
+                .addAddInventoryView()
+                .addUseInventoryView()
 
                 // Use cases
                 .addOpenGameUseCase()
@@ -25,6 +27,8 @@ public class Main {
                 .addBattleUseCase()
                 .addQuizUseCase()
                 .addResultsUseCase()
+                .addAddInventoryUseCase()
+                .addUseInventoryUseCase()
                 .build();
 
         application.pack();

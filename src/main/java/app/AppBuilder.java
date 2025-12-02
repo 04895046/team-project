@@ -2,16 +2,16 @@ package app;
 
 import API.GeoapifyStaticMap;
 import API.MoveStaticMapInterface;
-import data_access.GameDataAccessFactory;
+import data_access.FileGameDataAccessObject;
 import data_access.QuizzesReader;
-import use_case.Battle.BattleUserDataAccessInterface;
-import use_case.move.MoveGameDataAccessInterface;
-import use_case.openGame.OpenGameDataAccessInterface;
-import use_case.quiz.QuizDataAccessInterface;
-import use_case.show_results.ShowResultsGameDataAccessInterface;
 import interface_adapter.Battle.BattleController;
 import interface_adapter.Battle.BattlePresenter;
 import interface_adapter.Battle.BattleViewModel;
+import interface_adapter.InventoryAddItem.InventoryAddItemController;
+import interface_adapter.InventoryAddItem.InventoryAddItemPresenter;
+import interface_adapter.InventoryAddItem.InventoryAddItemViewModel;
+import interface_adapter.InventoryUseItem.InventoryUseItemPresenter;
+import interface_adapter.InventoryUseItem.InventoryUseItemViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.move.MoveController;
 import interface_adapter.move.MovePresenter;
@@ -26,6 +26,12 @@ import interface_adapter.results.ShowResultsPresenter;
 import use_case.Battle.BattleInputBoundary;
 import use_case.Battle.BattleInteractor;
 import use_case.Battle.BattleOutputBoundary;
+import use_case.InventoryAddItem.InventoryAddItemInputBoundary;
+import use_case.InventoryAddItem.InventoryAddItemInteractor;
+import use_case.InventoryAddItem.InventoryAddItemOutputBoundary;
+import use_case.InventoryUseItem.InventoryUseItemInputBoundary;
+import use_case.InventoryUseItem.InventoryUseItemInteractor;
+import use_case.InventoryUseItem.InventoryUseItemOutputBoundary;
 import use_case.loadQuiz.LoadQuizInputBoundary;
 import use_case.loadQuiz.LoadQuizInteractor;
 import use_case.loadQuiz.LoadQuizOutputBoundary;
@@ -33,9 +39,9 @@ import use_case.move.MoveInputBoundary;
 import use_case.move.MoveInteractor;
 import use_case.move.MoveOutputBoundary;
 import use_case.openGame.*;
-import use_case.quiz.SubmitQuizInputBoundary;
-import use_case.quiz.SubmitQuizInteractor;
-import use_case.quiz.SubmitQuizOutputBoundary;
+import use_case.submitQuiz.SubmitQuizInputBoundary;
+import use_case.submitQuiz.SubmitQuizInteractor;
+import use_case.submitQuiz.SubmitQuizOutputBoundary;
 import use_case.show_results.ShowResultsInputBoundary;
 import use_case.show_results.ShowResultsInteractor;
 import use_case.show_results.ShowResultsOutputBoundary;
@@ -51,15 +57,14 @@ public class AppBuilder {
     final ViewManagerModel viewManagerModel = new ViewManagerModel();
     ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
-    // Factory for creating data access objects - supports dependency injection
-    private final GameDataAccessFactory dataAccessFactory;
+    // set which data access implementation to use, can be any
+    // of the classes from the data_access package
 
-    // Data access objects created by the factory
-    private final MoveGameDataAccessInterface gameDataAccess;
-    private final BattleUserDataAccessInterface battleDataAccess;
-    private final QuizDataAccessInterface quizDataAccess;
-    private final ShowResultsGameDataAccessInterface resultsDataAccess;
-    private final OpenGameDataAccessInterface openGameDataAccess;
+    // DAO version using local file storage
+    private final FileGameDataAccessObject gameDataAccess = new FileGameDataAccessObject();
+
+    // DAO version using a shared external database
+    // final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(userFactory);
 
     private BattleView battleView;
     private BattleViewModel battleViewModel;
@@ -71,21 +76,12 @@ public class AppBuilder {
     private QuizViewModel quizViewModel;
     private ResultsView resultsView;
     private ResultsViewModel resultsViewModel;
+    private ItemView itemView;
+    private InventoryAddItemViewModel inventoryAddItemViewModel;
+    private InventoryView inventoryView;
+    private InventoryUseItemViewModel inventoryUseItemViewModel;
 
-    /**
-     * Creates an AppBuilder with the specified data access factory.
-     * This constructor follows Dependency Inversion Principle by accepting
-     * a factory interface rather than concrete implementations.
-     *
-     * @param dataAccessFactory The factory to create data access objects
-     */
-    public AppBuilder(GameDataAccessFactory dataAccessFactory) {
-        this.dataAccessFactory = dataAccessFactory;
-        this.gameDataAccess = dataAccessFactory.createGameDataAccess();
-        this.battleDataAccess = dataAccessFactory.createBattleDataAccess();
-        this.quizDataAccess = dataAccessFactory.createQuizDataAccess();
-        this.resultsDataAccess = dataAccessFactory.createResultsDataAccess();
-        this.openGameDataAccess = dataAccessFactory.createOpenGameDataAccess();
+    public AppBuilder() {
         cardPanel.setLayout(cardLayout);
     }
 
@@ -105,7 +101,7 @@ public class AppBuilder {
 
     public AppBuilder addOpenGameView() {
         openGameViewModel = new OpenGameViewModel();
-        openGameView = new OpenGameView(open);
+        openGameView = new OpenGameView(openGameViewModel);
         cardPanel.add(openGameView, openGameView.getViewName());
         return this;
     }
@@ -124,10 +120,24 @@ public class AppBuilder {
         return this;
     }
 
+    public AppBuilder addAddInventoryView() {
+        inventoryAddItemViewModel = new InventoryAddItemViewModel();
+        itemView = new ItemView(inventoryAddItemViewModel);
+        cardPanel.add(itemView, itemView.getViewName());
+        return this;
+    }
+
+    public AppBuilder addUseInventoryView() {
+        inventoryUseItemViewModel = new InventoryUseItemViewModel();
+        inventoryView = new InventoryView(inventoryUseItemViewModel);
+        cardPanel.add(inventoryView, inventoryView.getViewName());
+        return this;
+    }
+
     public AppBuilder addBattleUseCase() {
         final BattleOutputBoundary battleOutputBoundary = new BattlePresenter(battleViewModel, moveViewModel, viewManagerModel);
         final BattleInputBoundary battleInteractor = new BattleInteractor(
-                battleDataAccess, battleOutputBoundary);
+                gameDataAccess, battleOutputBoundary);
 
         BattleController controller = new BattleController(battleInteractor, quizViewModel);
         battleView.setBattleController(controller);
@@ -147,11 +157,9 @@ public class AppBuilder {
     }
 
     public AppBuilder addOpenGameUseCase() {
-        final ScreenSwitchBoundary openGameScreenSwitcher = new OpenGameScreenSwitcher(viewManagerModel);
         final OpenGameOutputBoundary openGameOutputBoundary = new OpenGamePresenter(
-                openGameViewModel, viewManagerModel);
-        final OpenGameInputBoundary openGameInteractor = new OpenGameInteractor(openGameOutputBoundary, openGameDataAccess,
-                openGameScreenSwitcher);
+                openGameViewModel, moveViewModel, viewManagerModel);
+        final OpenGameInputBoundary openGameInteractor = new OpenGameInteractor(openGameOutputBoundary, gameDataAccess);
 
         OpenGameController controller = new OpenGameController(openGameInteractor);
         openGameView.setOpenGameController(controller);
@@ -161,15 +169,15 @@ public class AppBuilder {
     public AppBuilder addQuizUseCase() {
         final LoadQuizOutputBoundary loadQuizOutputBoundary = new LoadQuizPresenter(quizViewModel);
         final LoadQuizInputBoundary loadQuizInteractor = new LoadQuizInteractor(
-                quizDataAccess, loadQuizOutputBoundary);
+                gameDataAccess, loadQuizOutputBoundary);
         final SubmitQuizOutputBoundary submitQuizOutputBoundary = new SubmitQuizPresenter(
                 quizViewModel, battleViewModel, viewManagerModel);
         final SubmitQuizInputBoundary submitQuizInteractor = new SubmitQuizInteractor(
-                quizDataAccess, submitQuizOutputBoundary);
+                gameDataAccess, submitQuizOutputBoundary);
 
         QuizController controller = new QuizController(submitQuizInteractor, loadQuizInteractor);
         quizView.setQuizController(controller);
-        new QuizzesReader().loadQuizzes(quizDataAccess);
+        new QuizzesReader().loadQuizzes(gameDataAccess);
         QuizState quizState = new QuizState();
         quizView.loadQuiz(quizState.setQuizId());
         return this;
@@ -178,11 +186,32 @@ public class AppBuilder {
     public AppBuilder addResultsUseCase() {
         final ShowResultsOutputBoundary showResultsOutputBoundary = new ShowResultsPresenter(resultsViewModel, moveViewModel, viewManagerModel);
         final ShowResultsInputBoundary showResultsInteractor = new ShowResultsInteractor(
-                resultsDataAccess, showResultsOutputBoundary);
+                gameDataAccess, showResultsOutputBoundary);
 
         ShowResultsController controller = new ShowResultsController(showResultsInteractor);
         moveView.setResultController(controller);
         resultsView.setResultController(controller);
+        return this;
+    }
+
+    public AppBuilder addAddInventoryUseCase() {
+        final InventoryAddItemOutputBoundary inventoryAddItemOutputBoundary = new InventoryAddItemPresenter(
+                inventoryAddItemViewModel, moveViewModel);
+        final InventoryAddItemInputBoundary inventoryAddItemInteractor = new InventoryAddItemInteractor(inventoryAddItemOutputBoundary, gameDataAccess);
+
+        InventoryAddItemController controller = new InventoryAddItemController(inventoryAddItemInteractor);
+        itemView.setController(controller);
+        moveView.setInventoryAddItemController(controller);
+        return this;
+    }
+
+    public AppBuilder addUseInventoryUseCase() {
+        final InventoryUseItemOutputBoundary inventoryUseItemPresenter = new InventoryUseItemPresenter();
+        final InventoryUseItemInputBoundary inventoryUseItemInteractor = new InventoryUseItemInteractor(
+                inventoryUseItemPresenter);
+
+        // InventoryUseItemController controller = new InventoryUseItemController();
+        // inventoryView.setController(controller);
         return this;
     }
 
