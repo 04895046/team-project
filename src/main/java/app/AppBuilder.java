@@ -206,12 +206,12 @@ public class AppBuilder {
         return this;
     }
     public AppBuilder addUseInventoryUseCase() {
-        final InventoryUseItemOutputBoundary inventoryUseItemPresenter = new InventoryUseItemPresenter();
-        final InventoryUseItemInputBoundary inventoryUseItemInteractor = new InventoryUseItemInteractor(
-                inventoryUseItemPresenter);
+        final InventoryUseItemOutputBoundary inventoryUseItemPresenter = new InventoryUseItemPresenter(
+                inventoryUseItemViewModel);
+        final InventoryUseItemInputBoundary inventoryUseItemInteractor = new InventoryUseItemInteractor(inventoryUseItemPresenter, gameDataAccess);
 
-        // InventoryUseItemController controller = new InventoryUseItemController();
-        // inventoryView.setController(controller);
+        InventoryUseItemController controller = new InventoryUseItemController(inventoryUseItemInteractor);
+        inventoryView.setController(controller);
         return this;
     }
 

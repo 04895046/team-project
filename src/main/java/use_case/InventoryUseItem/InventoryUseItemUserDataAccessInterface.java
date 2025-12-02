@@ -6,21 +6,24 @@ import entity.Inventory;
 
 public interface InventoryUseItemUserDataAccessInterface {
     /**
-     * returns inventory of user
+     * Returns inventory of user
+     * @param user the user
+     * @return the user's inventory
      */
     Inventory getInventory(User user);
 
     /**
-     * remove an item
+     * Remove an item from user's inventory
+     * @param user the user
      * @param item item to be removed from inventory
      */
     void removeItem(User user, Item item);
 
     /**
-     *
+     * Get an item by name from user's inventory
      * @param user user of game
      * @param name name of item to be looked up
-     * @return item looked up
+     * @return item looked up, or null if not found
      */
     Item getItemByName(User user, String name);
 }

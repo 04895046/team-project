@@ -1,65 +1,112 @@
 package view;
 
-// imports
-import entity.User;
 import interface_adapter.InventoryUseItem.InventoryUseItemController;
+import interface_adapter.InventoryUseItem.InventoryUseItemState;
 import interface_adapter.InventoryUseItem.InventoryUseItemViewModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 public class InventoryView extends JPanel implements PropertyChangeListener {
     private final String viewName = "UseItem";
     private final InventoryUseItemViewModel viewModel;
     private InventoryUseItemController controller;
-    // ui
+
+    // UI components
     private final JComboBox<String> inventoryDropdown = new JComboBox<>();
     private final JButton useItemButton = new JButton("Use Item");
+    private final JLabel messageLabel = new JLabel(" ");
 
     public InventoryView(InventoryUseItemViewModel viewModel) {
         this.viewModel = viewModel;
         viewModel.addPropertyChangeListener(this);
 
         // layout
-        setLayout(new BorderLayout(5,5));
+        setLayout(new BorderLayout(5, 5));
         setBorder(BorderFactory.createTitledBorder("Inventory"));
+
+        // top panel: dropdown + button
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topPanel.add(new JLabel("Items:"));
+        topPanel.add(inventoryDropdown);
+        topPanel.add(useItemButton);
+
         // use item button not normally available
         useItemButton.setEnabled(false);
 
-        // actual inventory dropdown
+        // dropdown selection listener
         inventoryDropdown.addActionListener(e -> {
             String selectedItemName = (String) inventoryDropdown.getSelectedItem();
-            useItemButton.setEnabled(selectedItemName != null); });
+            useItemButton.setEnabled(selectedItemName != null);
+        });
 
         // use item button action listener
         useItemButton.addActionListener(e -> {
             String selectedItemName = (String) inventoryDropdown.getSelectedItem();
             if (selectedItemName != null && controller != null) {
                 controller.useItem(selectedItemName);
-                updateDropdown();
-                useItemButton.setEnabled(false); } }); }
+            }
+        });
+
+        // message label styling
+        messageLabel.setForeground(new Color(0, 128, 0));  // 绿色
+        messageLabel.setFont(messageLabel.getFont().deriveFont(Font.BOLD));
+
+        // add to panel
+        add(topPanel, BorderLayout.NORTH);
+        add(messageLabel, BorderLayout.CENTER);
+    }
 
     public String getViewName() {
         return viewName;
     }
 
-    // set controller
-    public void setController(InventoryUseItemController controller) { this.controller = controller; }
+    public void setController(InventoryUseItemController controller) {
+        this.controller = controller;
+    }
 
-    //update dropdown with most recent inventory
+    /**
+     * State updates the inventory (items list dropdown in view panel)
+     */
     private void updateDropdown() {
         inventoryDropdown.removeAllItems();
-        User user = viewModel.getState().getUser();
-        if (user != null) {
-            for (String item: user.getInventory().getItemsList()) {
-                inventoryDropdown.addItem(item); } } }
+
+        InventoryUseItemState state = viewModel.getState();
+        List<String> itemNames = state.getItemNames();
+
+        if (itemNames != null) {
+            for (String itemName : itemNames) {
+                inventoryDropdown.addItem(itemName);
+            }
+        }
+
+        // 如果没有 items，disable button
+        useItemButton.setEnabled(inventoryDropdown.getItemCount() > 0
+                && inventoryDropdown.getSelectedItem() != null);
+    }
+
+    /**
+     * 更新消息显示（比如 "Item used! +5 HP"）
+     */
+    private void updateMessage() {
+        InventoryUseItemState state = viewModel.getState();
+        String message = state.getMessage();
+
+        if (message != null && !message.isEmpty()) {
+            messageLabel.setText(message);
+        } else {
+            messageLabel.setText(" ");  // 保持空间
+        }
+    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if ("inventory".equals(evt.getPropertyName()) || "state".equals(evt.getPropertyName())) {
-            updateDropdown();
-        }
+        // ViewModel 调用 firePropertyChanged() 时会触发这里
+        updateDropdown();
+        updateMessage();
     }
 }
+

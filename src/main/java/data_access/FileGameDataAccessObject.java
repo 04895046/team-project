@@ -2,6 +2,7 @@ package data_access;
 
 import entity.*;
 import use_case.Battle.BattleUserDataAccessInterface;
+import use_case.InventoryUseItem.InventoryUseItemUserDataAccessInterface;
 import use_case.move.MoveGameDataAccessInterface;
 import use_case.openGame.OpenGameDataAccessInterface;
 import use_case.submitQuiz.QuizDataAccessInterface;
@@ -16,7 +17,8 @@ import java.util.Map;
 
 public class FileGameDataAccessObject implements MoveGameDataAccessInterface,
         ShowResultsGameDataAccessInterface, BattleUserDataAccessInterface,
-        QuizDataAccessInterface, OpenGameDataAccessInterface {
+        QuizDataAccessInterface, OpenGameDataAccessInterface,
+        InventoryUseItemUserDataAccessInterface {
 
     private AdventureGame game;
     private final FileDataAccess fileDataAccess;
@@ -128,5 +130,20 @@ public class FileGameDataAccessObject implements MoveGameDataAccessInterface,
     @Override
     public void deleteSaveFile() {
         clearGameData();
+    }
+
+    @Override
+    public Inventory getInventory(User user) {
+        return null;
+    }
+
+    @Override
+    public void removeItem(User user, Item item) {
+
+    }
+
+    @Override
+    public Item getItemByName(User user, String name) {
+        return null;
     }
 }

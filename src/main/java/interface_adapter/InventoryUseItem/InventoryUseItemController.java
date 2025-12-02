@@ -6,26 +6,41 @@ import use_case.InventoryUseItem.InventoryUseItemInputBoundary;
 
 public class InventoryUseItemController {
 
-private final InventoryUseItemInputBoundary useItemBoundary;
-private User user;
+    private final InventoryUseItemInputBoundary useItemInteractor;
+    private User user;
 
-public InventoryUseItemController(InventoryUseItemInputBoundary useItemBoundary, User user) {
-    this.useItemBoundary = useItemBoundary;
-    this.user = user; }
+    public InventoryUseItemController(InventoryUseItemInputBoundary useItemInteractor) {
+        this.useItemInteractor = useItemInteractor;
+    }
 
-    // set the user
+    /**
+     * Set the current user
+     * @param user the user playing the game
+     */
     public void setUser(User user) {
         this.user = user;
     }
-// when user calls to use item
-public void useItem(String itemName) {
-    useItemBoundary.setUser(user);
-    InventoryUseItemInputData inputData = new InventoryUseItemInputData(itemName);
-    useItemBoundary.useItem(inputData); }
 
+    /**
+     * Called when user clicks "Use Item" in the dropdown
+     * @param itemName name of the item to use
+     */
+    public void useItem(String itemName) {
+        if (user == null || itemName == null) {
+            return;
+        }
+        InventoryUseItemInputData inputData = new InventoryUseItemInputData(itemName, user);
+        useItemInteractor.useItem(inputData);
+    }
 
-// when user calls to view inventory
-public void viewInventory() {
-    useItemBoundary.setUser(user);
-    useItemBoundary.viewInventory(); }
+    /**
+     * Called when user wants to view their inventory
+     */
+    public void viewInventory() {
+        if (user == null) {
+            return;
+        }
+        InventoryUseItemInputData inputData = new InventoryUseItemInputData(user);
+        useItemInteractor.viewInventory(inputData);
+    }
 }
