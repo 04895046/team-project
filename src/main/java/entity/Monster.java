@@ -17,11 +17,9 @@ public class Monster {
      * The constructor of the Monster. It randomly set the value of the HP, select name and generate spells from
      * the api.
      */
-    public Monster() {
+    public Monster(MonsterDetail api) {
         Random random = new Random();
         HP = random.nextInt(11) + 20;
-
-        MonsterDetail api = new SrdMonsterDetail();
         setSpells(api);
         setNAME(api);
     }

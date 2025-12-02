@@ -1,5 +1,7 @@
 package data_access;
 
+import API.MonsterDetail;
+import API.SrdMonsterDetail;
 import entity.*;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,6 +18,7 @@ import java.util.List;
 
 public class FileDataAccess {
     private static final String FILE_PATH = "userdata.json";
+    MonsterDetail api = new SrdMonsterDetail();
 
     public FileDataAccess() {
     }
@@ -228,7 +231,7 @@ public class FileDataAccess {
             // Only restore monster if it was still active (alive) when saved
             // Defeated monsters remain defeated (null) and won't respawn
             if (wasActive) {
-                monster = new Monster();
+                monster = new Monster(api);
                 // Restore saved HP and name using reflection
                 try {
                     Field hpField = Monster.class.getDeclaredField("HP");

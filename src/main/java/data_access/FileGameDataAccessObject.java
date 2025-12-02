@@ -1,5 +1,7 @@
 package data_access;
 
+import API.MonsterDetail;
+import API.SrdMonsterDetail;
 import entity.*;
 import use_case.Battle.BattleUserDataAccessInterface;
 import use_case.InventoryAddItem.InventoryAddItemUserDataAccessInterface;
@@ -22,6 +24,7 @@ public class FileGameDataAccessObject implements MoveGameDataAccessInterface,
     private AdventureGame game;
     private final FileDataAccess fileDataAccess;
     private static final String FILE_PATH = "userdata.json";
+    MonsterDetail api = new SrdMonsterDetail();
     private final Map<Integer, Quiz> store = new HashMap<>();
 
     public FileGameDataAccessObject() {
@@ -43,7 +46,7 @@ public class FileGameDataAccessObject implements MoveGameDataAccessInterface,
     private void startNewGame() {
         User user = new User();
         Location loc0 = new Location("Bahen Centre for Information Technology", 43.6594, -79.3981, null, null);
-        Location loc1 = new Location("Myhal Centre For Engineering Innovation & Entrepreneurship", 43.6606, -79.3966, new Monster(), null);
+        Location loc1 = new Location("Myhal Centre For Engineering Innovation & Entrepreneurship", 43.6606, -79.3966, new Monster(api), null);
         Location loc2 = new Location("Regis College", 43.6643, -79.3901, null, new Item("heal", "heal"));
         Location loc3 = new Location("Gerstein Science Information Centre", 43.6624, -79.3940, null, null);
 
