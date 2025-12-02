@@ -6,7 +6,7 @@ This readme include information such as:
 - explanations about our project
 - a summary of what our application is all about
 - a list of the user stories, along with who is responsible for each one
-- information about the API(s) that our project uses
+- information about the api(s) that our project uses
 - screenshots or animations demonstrating current functionality
 
 ### **contact information**

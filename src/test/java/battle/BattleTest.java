@@ -1,7 +1,7 @@
 package battle;
 
 import entity.*;
-import use_case.Battle.*;
+import use_case.battle.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

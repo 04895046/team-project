@@ -2,8 +2,8 @@ package interface_adapter.move;
 
 import entity.Monster;
 import entity.User;
-import interface_adapter.Battle.BattleState;
-import interface_adapter.Battle.BattleViewModel;
+import interface_adapter.battle.BattleState;
+import interface_adapter.battle.BattleViewModel;
 import interface_adapter.ViewManagerModel;
 import use_case.move.MoveOutputBoundary;
 import use_case.move.MoveOutputData;

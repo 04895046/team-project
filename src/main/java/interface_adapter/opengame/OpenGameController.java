@@ -14,7 +14,6 @@ public class OpenGameController {
 
     public void startNewGame() {
         OpenGameInputData data =
-                //TODO: CAN DELETE THE LAST TWO VARS?
                 new OpenGameInputData(true);
         interactor.execute(data);
     }
@@ -28,9 +27,4 @@ public class OpenGameController {
         interactor.execute(data);
     }
 
-//    public void continueGame() {
-//        OpenGameInputData data =
-//                new OpenGameInputData(false, null, null);
-//        interactor.execute(data);
-//    }
 }

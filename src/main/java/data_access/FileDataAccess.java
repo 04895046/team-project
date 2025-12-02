@@ -1,7 +1,7 @@
 package data_access;
 
-import API.MonsterDetail;
-import API.SrdMonsterDetail;
+import api.MonsterDetail;
+import api.SrdMonsterDetail;
 import entity.*;
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -2,9 +2,9 @@ package view;
 
 import entity.Monster;
 import entity.User;
-import interface_adapter.Battle.BattleController;
-import interface_adapter.Battle.BattleState;
-import interface_adapter.Battle.BattleViewModel;
+import interface_adapter.battle.BattleController;
+import interface_adapter.battle.BattleState;
+import interface_adapter.battle.BattleViewModel;
 
 
 import javax.swing.*;

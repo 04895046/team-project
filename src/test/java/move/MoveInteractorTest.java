@@ -1,12 +1,11 @@
 package move;
 
-import API.MoveStaticMapInterface;
+import api.MoveStaticMapInterface;
 import entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import use_case.move.*;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 

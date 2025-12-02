@@ -1,6 +1,6 @@
 package entity;
 
-import API.MonsterDetail;
+import api.MonsterDetail;
 
 import java.util.ArrayList;
 import java.util.Random;

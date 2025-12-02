@@ -1,8 +1,8 @@
 package view;
 
-import interface_adapter.InventoryUseItem.InventoryUseItemController;
-import interface_adapter.InventoryUseItem.InventoryUseItemState;
-import interface_adapter.InventoryUseItem.InventoryUseItemViewModel;
+import interface_adapter.inventoryUseItem.InventoryUseItemController;
+import interface_adapter.inventoryUseItem.InventoryUseItemState;
+import interface_adapter.inventoryUseItem.InventoryUseItemViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +26,7 @@ public class InventoryView extends JPanel implements PropertyChangeListener {
 
         // Layout
         setLayout(new BorderLayout(5, 5));
-        setBorder(BorderFactory.createTitledBorder("Inventory"));
+        setBorder(BorderFactory.createTitledBorder("inventory"));
         setPreferredSize(new Dimension(250, 0));
 
         // Top panel: dropdown + button

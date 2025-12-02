@@ -1,15 +1,15 @@
 package data_access;
 
-import API.MonsterDetail;
-import API.SrdMonsterDetail;
+import api.MonsterDetail;
+import api.SrdMonsterDetail;
 import entity.*;
-import use_case.Battle.BattleUserDataAccessInterface;
-import use_case.InventoryAddItem.InventoryAddItemUserDataAccessInterface;
-import use_case.InventoryUseItem.InventoryUseItemUserDataAccessInterface;
+import use_case.battle.BattleUserDataAccessInterface;
+import use_case.inventoryAddItem.InventoryAddItemUserDataAccessInterface;
+import use_case.inventoryUseItem.InventoryUseItemUserDataAccessInterface;
 import use_case.move.MoveGameDataAccessInterface;
 import use_case.openGame.OpenGameDataAccessInterface;
 import use_case.submitQuiz.QuizDataAccessInterface;
-import use_case.show_results.ShowResultsGameDataAccessInterface;
+import use_case.showResults.ShowResultsGameDataAccessInterface;
 
 import java.io.File;
 import java.lang.reflect.Field;

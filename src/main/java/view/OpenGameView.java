@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class OpenGameView extends JPanel {
 
-    private final String viewName = "OpenGame";
+    private final String viewName = "openGame";
 
     private OpenGameController controller;
     private final OpenGameViewModel viewModel;

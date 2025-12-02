@@ -1,7 +1,7 @@
 package interface_adapter.quiz;
 
-import interface_adapter.Battle.BattleState;
-import interface_adapter.Battle.BattleViewModel;
+import interface_adapter.battle.BattleState;
+import interface_adapter.battle.BattleViewModel;
 import interface_adapter.ViewManagerModel;
 import use_case.submitQuiz.SubmitQuizOutputBoundary;
 import use_case.submitQuiz.SubmitQuizOutputData;

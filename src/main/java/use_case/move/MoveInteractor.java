@@ -1,6 +1,6 @@
 package use_case.move;
 
-import API.MoveStaticMapInterface;
+import api.MoveStaticMapInterface;
 import entity.*;
 
 public class MoveInteractor implements MoveInputBoundary {
