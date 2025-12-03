@@ -289,4 +289,64 @@ public class BattleTest {
         assertTrue(user.getBonusHP() < 10,
                 "Bonus HP should be reduced");
     }
+
+    // ==================== BattleOutputData Tests ====================
+
+    @Test
+    void testBattleOutputData_GetUser() {
+        // Arrange
+        User user = new User();
+        Spells[] monsterSpells = {new Spells("Test", 5)};
+        TestMonster monster = new TestMonster(50.0, monsterSpells, "TestMonster");
+
+        BattleOutputData outputData = new BattleOutputData(user, monster);
+
+        // Act & Assert
+        assertSame(user, outputData.getUser(),
+                "getUser should return the same User object");
+    }
+
+    @Test
+    void testBattleOutputData_GetMonster() {
+        // Arrange
+        User user = new User();
+        Spells[] monsterSpells = {new Spells("Test", 5)};
+        TestMonster monster = new TestMonster(50.0, monsterSpells, "TestMonster");
+
+        BattleOutputData outputData = new BattleOutputData(user, monster);
+
+        // Act & Assert
+        assertSame(monster, outputData.getMonster(),
+                "getMonster should return the same Monster object");
+    }
+
+    @Test
+    void testBattleOutputData_GetUserHP() {
+        // Arrange
+        User user = new User();
+        double expectedHP = user.getHP();
+        Spells[] monsterSpells = {new Spells("Test", 5)};
+        TestMonster monster = new TestMonster(50.0, monsterSpells, "TestMonster");
+
+        BattleOutputData outputData = new BattleOutputData(user, monster);
+
+        // Act & Assert
+        assertEquals(expectedHP, outputData.getUserHP(), 0.01,
+                "getUserHP should return the user's current HP");
+    }
+
+    @Test
+    void testBattleOutputData_GetMonsterHP() {
+        // Arrange
+        User user = new User();
+        Spells[] monsterSpells = {new Spells("Test", 5)};
+        double expectedHP = 75.0;
+        TestMonster monster = new TestMonster(expectedHP, monsterSpells, "TestMonster");
+
+        BattleOutputData outputData = new BattleOutputData(user, monster);
+
+        // Act & Assert
+        assertEquals(expectedHP, outputData.getMonsterHP(), 0.01,
+                "getMonsterHP should return the monster's current HP");
+    }
 }
