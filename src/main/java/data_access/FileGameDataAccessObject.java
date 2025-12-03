@@ -101,18 +101,6 @@ public class FileGameDataAccessObject implements MoveGameDataAccessInterface,
         startNewGame();
     }
 
-    private void copyUserFields(User source, User target) {
-        try {
-            for (Field field : User.class.getDeclaredFields()) {
-                field.setAccessible(true);
-                Object value = field.get(source);
-                field.set(target, value);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     // ==================== QuizUserDataAccessInterface ====================
     @Override
     public Quiz findById(int quizId) {
@@ -137,10 +125,6 @@ public class FileGameDataAccessObject implements MoveGameDataAccessInterface,
         return file.exists() && file.length() > 0;
     }
 
-    @Override
-    public void deleteSaveFile() {
-        clearGameData();
-    }
     // ============== UseItemDataAccess Interface ===============
     @Override
     public Inventory getInventory() {

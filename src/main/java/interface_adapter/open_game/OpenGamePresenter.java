@@ -40,7 +40,6 @@ public class OpenGamePresenter implements OpenGameOutputBoundary {
     @Override
     public void prepareFailView(String errorMessage) {
         viewModel.setMessage(errorMessage);
-        viewModel.setState(null);
         viewModel.firePropertyChange();   // update UI (stays on same screen)
     }
 

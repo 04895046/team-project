@@ -22,18 +22,15 @@ public class BattleTest {
         private boolean lossViewPrepared = false;
         private boolean quizViewPrepared = false;
         private int updateUserTurnStateCalled = 0;
-        private BattleOutputData lastOutputData = null;
 
         @Override
         public void prepareWinView(BattleOutputData outputData) {
             winViewPrepared = true;
-            lastOutputData = outputData;
         }
 
         @Override
         public void prepareLossView(BattleOutputData outputData) {
             lossViewPrepared = true;
-            lastOutputData = outputData;
         }
 
         @Override
@@ -44,12 +41,10 @@ public class BattleTest {
         @Override
         public void updateUserTurnState(BattleOutputData outputData) {
             updateUserTurnStateCalled++;
-            lastOutputData = outputData;
         }
 
         @Override
         public void updateMonsterTurnState(BattleOutputData outputData) {
-            lastOutputData = outputData;
         }
 
         public boolean isWinViewPrepared() { return winViewPrepared; }
@@ -111,9 +106,6 @@ public class BattleTest {
             hp -= DMG;
             if (hp < 0) hp = 0;
         }
-
-        @Override
-        public Spells[] getSpells() { return spells; }
 
         @Override
         public Spells chooseSpell() { return spells[0]; }

@@ -25,17 +25,9 @@ public class InventoryUseItemPresenter implements InventoryUseItemOutputBoundary
         if (!outputData.isSuccess()) {
             // Handle error case
             state.setMessage("Error: " + outputData.getErrorMessage());
-            state.setHpIncrease(0);
-            state.setDefIncrease(0);
-            state.setDmgIncrease(0);
             viewModel.firePropertyChange();
             return;
         }
-
-        // Set stat increases
-        state.setHpIncrease(outputData.getHpIncrease());
-        state.setDefIncrease(outputData.getDefIncrease());
-        state.setDmgIncrease(outputData.getDmgIncrease());
 
         // Convert DTOs to simple lists for the view
         List<String> names = new ArrayList<>();
@@ -49,8 +41,6 @@ public class InventoryUseItemPresenter implements InventoryUseItemOutputBoundary
         }
 
         state.setItemNames(names);
-        state.setItemTypes(types);
-        state.setItemValues(values);
 
         // Build success message
         StringBuilder message = new StringBuilder("Item used!");
@@ -86,8 +76,6 @@ public class InventoryUseItemPresenter implements InventoryUseItemOutputBoundary
             // Handle error case
             state.setMessage("Error: " + outputData.getErrorMessage());
             state.setItemNames(new ArrayList<>());
-            state.setItemTypes(new ArrayList<>());
-            state.setItemValues(new ArrayList<>());
             viewModel.firePropertyChange();
             return;
         }
@@ -104,8 +92,6 @@ public class InventoryUseItemPresenter implements InventoryUseItemOutputBoundary
         }
 
         state.setItemNames(names);
-        state.setItemTypes(types);
-        state.setItemValues(values);
         state.setMessage("Inventory loaded");
 
         viewModel.firePropertyChange();

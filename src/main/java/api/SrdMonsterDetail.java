@@ -1,8 +1,6 @@
 package api;
 
-import entity.Item;
 import entity.Spells;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -100,38 +98,4 @@ public class SrdMonsterDetail implements MonsterDetail {
         }
     }
 
-    /**
-     * This method generates an array for items
-     *
-     * @throws MonsterNotFoundException throws the exception if nothing is founded.
-     */
-    @Override
-    public ArrayList<Item> generateItems() {
-
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .build();
-        Request request = new Request.Builder()
-                .url(String.format("https://www.dnd5eapi.co%s", getAllResourcesURL().get("magic-items")))
-                .addHeader("Accept", "application/json")
-                .build();
-        ArrayList<Item> items = new ArrayList<>();
-
-        try {
-            final Response response = client.newCall(request).execute();
-            final JSONObject responsebody = new JSONObject(response.body().string());
-            JSONArray results = responsebody.getJSONArray("results");
-
-            for (int i = 0; i < results.length(); i++) {
-                JSONObject item = results.getJSONObject(i);
-                String name = item.getString("name");
-                String type = item.getJSONObject("equipment_category").getString("index");
-
-                items.add(new Item(name, type));
-            }
-
-        } catch (Exception exception) {
-            throw new MonsterNotFoundException();
-        }
-        return items;
-    }
 }

@@ -43,11 +43,6 @@ class OpenGameInteractorTest {
         public boolean saveFileExists() {
             return saveExists;
         }
-
-        @Override
-        public void deleteSaveFile() {
-            // not needed for these tests
-        }
     }
 
     // ---------- TESTS ----------
