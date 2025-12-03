@@ -37,40 +37,20 @@ public class InventoryUseItemState {
         this.itemNames = itemNames;
     }
 
-    public List<String> getItemTypes() {
-        return itemTypes;
-    }
-
     public void setItemTypes(List<String> itemTypes) {
         this.itemTypes = itemTypes;
-    }
-
-    public List<Integer> getItemValues() {
-        return itemValues;
     }
 
     public void setItemValues(List<Integer> itemValues) {
         this.itemValues = itemValues;
     }
 
-    public int getHpIncrease() {
-        return hpIncrease;
-    }
-
     public void setHpIncrease(int hpIncrease) {
         this.hpIncrease = hpIncrease;
     }
 
-    public int getDefIncrease() {
-        return defIncrease;
-    }
-
     public void setDefIncrease(int defIncrease) {
         this.defIncrease = defIncrease;
-    }
-
-    public int getDmgIncrease() {
-        return dmgIncrease;
     }
 
     public void setDmgIncrease(int dmgIncrease) {

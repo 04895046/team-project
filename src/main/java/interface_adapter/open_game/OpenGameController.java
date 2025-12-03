@@ -16,9 +16,6 @@ public class OpenGameController {
                 new OpenGameInputData(true);
         interactor.execute(data);
     }
-    public void switchToMoveScreen() {
-        interactor.switchToMoveScreen();
-    }
 
     public void continueGame() {
         OpenGameInputData data =

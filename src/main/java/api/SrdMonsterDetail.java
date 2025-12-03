@@ -25,7 +25,6 @@ public class SrdMonsterDetail implements MonsterDetail {
     public HashMap<String, String> getAllResourcesURL() {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
-        MediaType mediaType = MediaType.parse("text/plain");
         Request request = new Request.Builder()
                 .url("https://www.dnd5eapi.co/api/2014")
                 .addHeader("Accept", "application/json")
@@ -81,7 +80,6 @@ public class SrdMonsterDetail implements MonsterDetail {
     public String[] generateRaces() {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
-        MediaType mediaType = MediaType.parse("text/plain");
         Request request = new Request.Builder()
                 .url(String.format("https://www.dnd5eapi.co%s", getAllResourcesURL().get("races")))
                 .addHeader("Accept", "application/json")

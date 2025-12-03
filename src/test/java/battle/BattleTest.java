@@ -22,7 +22,6 @@ public class BattleTest {
         private boolean lossViewPrepared = false;
         private boolean quizViewPrepared = false;
         private int updateUserTurnStateCalled = 0;
-        private int updateMonsterTurnStateCalled = 0;
         private BattleOutputData lastOutputData = null;
 
         @Override
@@ -50,7 +49,6 @@ public class BattleTest {
 
         @Override
         public void updateMonsterTurnState(BattleOutputData outputData) {
-            updateMonsterTurnStateCalled++;
             lastOutputData = outputData;
         }
 
@@ -58,7 +56,6 @@ public class BattleTest {
         public boolean isLossViewPrepared() { return lossViewPrepared; }
         public boolean isQuizViewPrepared() { return quizViewPrepared; }
         public int getUpdateUserTurnStateCallCount() { return updateUserTurnStateCalled; }
-        public BattleOutputData getLastOutputData() { return lastOutputData; }
     }
 
     /**
@@ -98,7 +95,7 @@ public class BattleTest {
      */
     private static class TestMonster extends Monster {
         private double hp;
-        private Spells[] spells;
+        private final Spells[] spells;
 
         public TestMonster(double hp, Spells[] spells, String name) {
             this.hp = hp;

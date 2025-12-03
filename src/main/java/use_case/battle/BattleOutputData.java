@@ -10,7 +10,6 @@ public class BattleOutputData {
     public BattleOutputData(User user, Monster monster) {
         this.user = user;
         this.monster = monster;
-        boolean battleEnded = !user.isAlive() || !monster.isAlive();
     }
 
     public User getUser() {

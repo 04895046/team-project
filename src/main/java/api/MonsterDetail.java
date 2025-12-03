@@ -25,12 +25,6 @@ public interface MonsterDetail {
      */
     String[] generateRaces() throws MonsterNotFoundException;
 
-    /**
-     * this method will get an HashMap for items, where the keys are the names of the items
-     * @throws MonsterNotFoundException throws the exception if nothing is found
-     */
-    ArrayList<Item> generateItems() throws MonsterNotFoundException;
-
     class MonsterNotFoundException extends RuntimeException {
         public MonsterNotFoundException() {
             super("Monster not found");

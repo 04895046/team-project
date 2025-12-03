@@ -42,13 +42,6 @@ public class Monster {
     }
 
     /**
-     * The getter for the SPELL.
-     */
-    public Spells[] getSpells() {
-        return SPELL;
-    }
-
-    /**
      * Decrease the HP.
      */
     public void HPDecrease(double DMG){

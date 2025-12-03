@@ -54,8 +54,4 @@ public class OpenGamePresenter implements OpenGameOutputBoundary {
         moveState.setNeedUpdate(true);
         moveViewModel.firePropertyChange();
     }
-
-    public OpenGameViewModel getViewModel() {
-        return viewModel;
-    }
 }
