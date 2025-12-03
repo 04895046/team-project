@@ -37,7 +37,7 @@ public class ShowResultsPresenter implements ShowResultsOutputBoundary {
     public void switchToOpenGameView() {
         moveViewModel.firePropertyChange();
 
-        viewManagerModel.setState("OpenGame");
+        viewManagerModel.setState("open_game");
         viewManagerModel.firePropertyChange();
     }
 }

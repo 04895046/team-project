@@ -2,11 +2,10 @@ package view;
 
 import entity.Monster;
 import entity.User;
-import interface_adapter.Battle.BattleController;
-import interface_adapter.Battle.BattleState;
-import interface_adapter.Battle.BattleViewModel;
-import interface_adapter.InventoryUseItem.InventoryUseItemController;
-import interface_adapter.quiz.QuizViewModel;
+import interface_adapter.battle.BattleController;
+import interface_adapter.battle.BattleState;
+import interface_adapter.battle.BattleViewModel;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,9 +22,6 @@ public class BattleView extends JPanel implements ActionListener, PropertyChange
     private final String viewName = "Battle";
     private final BattleViewModel viewModel;
     private BattleController battleController;
-    private InventoryUseItemController inventoryController;
-    private final QuizViewModel quizViewModel;
-
 
     // UI Components
     private final JLabel titleLabel;
@@ -34,66 +30,58 @@ public class BattleView extends JPanel implements ActionListener, PropertyChange
     private final JLabel monsterHpLabel;
     private final JTextArea battleMessageArea;
     private final JButton attackButton;
-    private final JComboBox<String> inventoryDropdown = new JComboBox<>();
-    private final JButton useItemButton = new JButton("Use Item");
-    private final JTextArea inventoryDetailsArea = new JTextArea(5,20);
 
-
-    public BattleView(BattleViewModel battleViewModel, QuizViewModel quizViewModel) {
+    public BattleView(BattleViewModel battleViewModel, InventoryView inventoryView) {
         this.viewModel = battleViewModel;
-        this.quizViewModel = quizViewModel;
         this.viewModel.addPropertyChangeListener(this);
 
         // Initialize UI components
         titleLabel = new JLabel("Battle", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 32));
 
         userHpLabel = new JLabel("HP: N/A");
-        monsterNameLabel = new JLabel("Monster: N/A");
-        monsterHpLabel = new JLabel("HP: N/A");
+        userHpLabel.setFont(new Font("Arial", Font.BOLD, 18));
 
-        battleMessageArea = new JTextArea(5, 30);
+        monsterNameLabel = new JLabel("Monster: N/A");
+        monsterNameLabel.setFont(new Font("Arial", Font.BOLD, 16));
+
+        monsterHpLabel = new JLabel("HP: N/A");
+        monsterHpLabel.setFont(new Font("Arial", Font.BOLD, 18));
+
+        // Battle Log
+        battleMessageArea = new JTextArea(12, 50);
         battleMessageArea.setEditable(false);
         battleMessageArea.setLineWrap(true);
         battleMessageArea.setWrapStyleWord(true);
         battleMessageArea.setText("Battle is ready to begin...");
-
-        inventoryDetailsArea.setLineWrap(true);
-        inventoryDetailsArea.setEditable(false);
-        inventoryDetailsArea.setWrapStyleWord(true);
-        JScrollPane inventoryDisplayScrollPane = new JScrollPane(inventoryDetailsArea);
-
-        useItemButton.setEnabled(false);
+        battleMessageArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
 
         attackButton = new JButton("Attack");
+        attackButton.setFont(new Font("Arial", Font.BOLD, 16));
+        attackButton.setPreferredSize(new Dimension(120, 40));
 
         // Add action listeners
         attackButton.addActionListener(this);
-        inventoryDropdown.addActionListener(e-> {
-            String selectedItemName = (String) inventoryDropdown.getSelectedItem();
-            if (selectedItemName != null) {  //display details of item
-                inventoryDetailsArea.setText(selectedItemName); } else {
-                inventoryDetailsArea.setText("");
-                useItemButton.setEnabled(false); } } );
-
-        useItemButton.addActionListener(e-> {
-            String selectedItemName = (String) inventoryDropdown.getSelectedItem();
-            if (selectedItemName != null && inventoryController != null) {
-                inventoryController.useItem(selectedItemName);
-                inventoryDropdown.removeItem(selectedItemName);
-                useItemButton.setEnabled(false);}
-        else {useItemButton.setEnabled(true);}} );
 
         // Layout setup
         setupLayout();
+
+        if (inventoryView != null) {
+            inventoryView.setPreferredSize(new Dimension(280, 0));
+            add(inventoryView, BorderLayout.EAST);
+            revalidate();
+            repaint();
+        }
+
+        setPreferredSize(new Dimension(900, 600));
     }
 
     /**
      * Sets up the layout of the view.
      */
     private void setupLayout() {
-        setLayout(new BorderLayout(10, 10));
-        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setLayout(new BorderLayout(15, 15));
+        setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
 
         // Title panel
         JPanel titlePanel = new JPanel();
@@ -101,41 +89,71 @@ public class BattleView extends JPanel implements ActionListener, PropertyChange
         add(titlePanel, BorderLayout.NORTH);
 
         // Center panel with battle info
-        JPanel centerPanel = new JPanel(new GridLayout(3, 1, 10, 10));
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+
+        JPanel statsPanel = new JPanel(new GridLayout(1, 2, 20, 0));
 
         // User info panel
-        JPanel userPanel = new JPanel(new GridLayout(2, 1));
-        userPanel.setBorder(BorderFactory.createTitledBorder("Player"));
+        JPanel userPanel = new JPanel();
+        userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.Y_AXIS));
+        userPanel.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(new Color(67, 109, 144), 2),
+                "Player",
+                javax.swing.border.TitledBorder.CENTER,
+                javax.swing.border.TitledBorder.TOP,
+                new Font("Arial", Font.BOLD, 14)
+        ));
+        userPanel.add(Box.createVerticalGlue());
+        userHpLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         userPanel.add(userHpLabel);
-
-        //inventory subpanel
-        JPanel inventorySubPanel=  new JPanel(new BorderLayout());
-        JLabel inventoryLabel = new JLabel("Inventory");
-        inventorySubPanel.add(inventoryLabel, BorderLayout.NORTH);
-        inventorySubPanel.add(inventoryDropdown, BorderLayout.CENTER);
-        inventorySubPanel.add(useItemButton, BorderLayout.SOUTH);
-        userPanel.add(inventorySubPanel);
+        userPanel.add(Box.createVerticalGlue());
+        userPanel.setPreferredSize(new Dimension(200, 80));
 
         // Monster info panel
-        JPanel monsterPanel = new JPanel(new GridLayout(2, 1));
-        monsterPanel.setBorder(BorderFactory.createTitledBorder("Monster"));
+        JPanel monsterPanel = new JPanel();
+        monsterPanel.setLayout(new BoxLayout(monsterPanel, BoxLayout.Y_AXIS));
+        monsterPanel.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(new Color(178, 34, 34), 2),
+                "Monster",
+                javax.swing.border.TitledBorder.CENTER,
+                javax.swing.border.TitledBorder.TOP,
+                new Font("Arial", Font.BOLD, 14)
+        ));
+        monsterPanel.add(Box.createVerticalGlue());
+        monsterNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        monsterHpLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         monsterPanel.add(monsterNameLabel);
+        monsterPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         monsterPanel.add(monsterHpLabel);
+        monsterPanel.add(Box.createVerticalGlue());
+        monsterPanel.setPreferredSize(new Dimension(200, 80));
+
+        statsPanel.add(userPanel);
+        statsPanel.add(monsterPanel);
 
         // Battle message panel
         JPanel messagePanel = new JPanel(new BorderLayout());
-        messagePanel.setBorder(BorderFactory.createTitledBorder("Battle Log"));
+        messagePanel.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.DARK_GRAY, 1),
+                "Battle Log",
+                javax.swing.border.TitledBorder.LEFT,
+                javax.swing.border.TitledBorder.TOP,
+                new Font("Arial", Font.BOLD, 14)
+        ));
         JScrollPane scrollPane = new JScrollPane(battleMessageArea);
+        scrollPane.setPreferredSize(new Dimension(500, 250));
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         messagePanel.add(scrollPane, BorderLayout.CENTER);
 
-        centerPanel.add(userPanel);
-        centerPanel.add(monsterPanel);
+        centerPanel.add(statsPanel);
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         centerPanel.add(messagePanel);
 
         add(centerPanel, BorderLayout.CENTER);
 
         // Button panel
-        JPanel buttonPanel = new JPanel(new FlowLayout());
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         buttonPanel.add(attackButton);
         add(buttonPanel, BorderLayout.SOUTH);
     }
@@ -147,12 +165,6 @@ public class BattleView extends JPanel implements ActionListener, PropertyChange
         this.battleController = controller;
     }
 
-    /**
-     * Sets the controller for inventory
-     */
-    public void setInventoryController(InventoryUseItemController controller) {
-        this.inventoryController = controller;
-    }
     /**
      * Returns the view name.
      */
@@ -187,13 +199,10 @@ public class BattleView extends JPanel implements ActionListener, PropertyChange
         }
 
         if (battleController != null && state.getUser() != null && state.getMonster() != null) {
-
-            // Disable attack button
             attackButton.setEnabled(false);
             User user = state.getUser();
             Monster monster = state.getMonster();
             battleController.switchToQuizView(user, monster);
-            // Buttons will be re-enabled in propertyChange if battle continues
         } else {
             JOptionPane.showMessageDialog(this,
                     "Battle is not properly initialized!",
@@ -231,6 +240,11 @@ public class BattleView extends JPanel implements ActionListener, PropertyChange
      * Updates all display elements based on the current state.
      */
     private void updateDisplay(BattleState state) {
+        if (state.isNewBattleStarted()) {
+            battleMessageArea.setText("Battle is ready to begin...");
+            state.setNewBattleStarted(false);
+        }
+
         // Update user info
         if (state.getUser() != null) {
             userHpLabel.setText(String.format("HP: %.1f", state.getUserHp()));
@@ -269,6 +283,5 @@ public class BattleView extends JPanel implements ActionListener, PropertyChange
         }
     }
 }
-
 
 

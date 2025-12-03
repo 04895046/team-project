@@ -1,7 +1,7 @@
 package battle;
 
 import entity.*;
-import use_case.Battle.*;
+import use_case.battle.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,19 +22,15 @@ public class BattleTest {
         private boolean lossViewPrepared = false;
         private boolean quizViewPrepared = false;
         private int updateUserTurnStateCalled = 0;
-        private int updateMonsterTurnStateCalled = 0;
-        private BattleOutputData lastOutputData = null;
 
         @Override
         public void prepareWinView(BattleOutputData outputData) {
             winViewPrepared = true;
-            lastOutputData = outputData;
         }
 
         @Override
         public void prepareLossView(BattleOutputData outputData) {
             lossViewPrepared = true;
-            lastOutputData = outputData;
         }
 
         @Override
@@ -45,20 +41,16 @@ public class BattleTest {
         @Override
         public void updateUserTurnState(BattleOutputData outputData) {
             updateUserTurnStateCalled++;
-            lastOutputData = outputData;
         }
 
         @Override
         public void updateMonsterTurnState(BattleOutputData outputData) {
-            updateMonsterTurnStateCalled++;
-            lastOutputData = outputData;
         }
 
         public boolean isWinViewPrepared() { return winViewPrepared; }
         public boolean isLossViewPrepared() { return lossViewPrepared; }
         public boolean isQuizViewPrepared() { return quizViewPrepared; }
         public int getUpdateUserTurnStateCallCount() { return updateUserTurnStateCalled; }
-        public BattleOutputData getLastOutputData() { return lastOutputData; }
     }
 
     /**
@@ -98,7 +90,7 @@ public class BattleTest {
      */
     private static class TestMonster extends Monster {
         private double hp;
-        private Spells[] spells;
+        private final Spells[] spells;
 
         public TestMonster(double hp, Spells[] spells, String name) {
             this.hp = hp;
@@ -114,9 +106,6 @@ public class BattleTest {
             hp -= DMG;
             if (hp < 0) hp = 0;
         }
-
-        @Override
-        public Spells[] getSpells() { return spells; }
 
         @Override
         public Spells chooseSpell() { return spells[0]; }
@@ -299,5 +288,65 @@ public class BattleTest {
                 "Main HP should be unchanged when bonus HP absorbs damage");
         assertTrue(user.getBonusHP() < 10,
                 "Bonus HP should be reduced");
+    }
+
+    // ==================== BattleOutputData Tests ====================
+
+    @Test
+    void testBattleOutputData_GetUser() {
+        // Arrange
+        User user = new User();
+        Spells[] monsterSpells = {new Spells("Test", 5)};
+        TestMonster monster = new TestMonster(50.0, monsterSpells, "TestMonster");
+
+        BattleOutputData outputData = new BattleOutputData(user, monster);
+
+        // Act & Assert
+        assertSame(user, outputData.getUser(),
+                "getUser should return the same User object");
+    }
+
+    @Test
+    void testBattleOutputData_GetMonster() {
+        // Arrange
+        User user = new User();
+        Spells[] monsterSpells = {new Spells("Test", 5)};
+        TestMonster monster = new TestMonster(50.0, monsterSpells, "TestMonster");
+
+        BattleOutputData outputData = new BattleOutputData(user, monster);
+
+        // Act & Assert
+        assertSame(monster, outputData.getMonster(),
+                "getMonster should return the same Monster object");
+    }
+
+    @Test
+    void testBattleOutputData_GetUserHP() {
+        // Arrange
+        User user = new User();
+        double expectedHP = user.getHP();
+        Spells[] monsterSpells = {new Spells("Test", 5)};
+        TestMonster monster = new TestMonster(50.0, monsterSpells, "TestMonster");
+
+        BattleOutputData outputData = new BattleOutputData(user, monster);
+
+        // Act & Assert
+        assertEquals(expectedHP, outputData.getUserHP(), 0.01,
+                "getUserHP should return the user's current HP");
+    }
+
+    @Test
+    void testBattleOutputData_GetMonsterHP() {
+        // Arrange
+        User user = new User();
+        Spells[] monsterSpells = {new Spells("Test", 5)};
+        double expectedHP = 75.0;
+        TestMonster monster = new TestMonster(expectedHP, monsterSpells, "TestMonster");
+
+        BattleOutputData outputData = new BattleOutputData(user, monster);
+
+        // Act & Assert
+        assertEquals(expectedHP, outputData.getMonsterHP(), 0.01,
+                "getMonsterHP should return the monster's current HP");
     }
 }

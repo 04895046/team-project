@@ -1,13 +1,14 @@
 package data_access;
 
-import API.MonsterDetail;
-import API.SrdMonsterDetail;
+import api.MonsterDetail;
+import api.SrdMonsterDetail;
 import entity.*;
-import use_case.Battle.BattleUserDataAccessInterface;
-import use_case.InventoryAddItem.InventoryAddItemUserDataAccessInterface;
+import use_case.battle.BattleUserDataAccessInterface;
+import use_case.inventory_addItem.InventoryAddItemUserDataAccessInterface;
+import use_case.inventory_useItem.InventoryUseItemUserDataAccessInterface;
 import use_case.move.MoveGameDataAccessInterface;
-import use_case.openGame.OpenGameDataAccessInterface;
-import use_case.submitQuiz.QuizDataAccessInterface;
+import use_case.open_game.OpenGameDataAccessInterface;
+import use_case.submit_quiz.QuizDataAccessInterface;
 import use_case.show_results.ShowResultsGameDataAccessInterface;
 
 import java.io.File;
@@ -19,7 +20,7 @@ import java.util.Map;
 
 public class FileGameDataAccessObject implements MoveGameDataAccessInterface,
         ShowResultsGameDataAccessInterface, BattleUserDataAccessInterface,
-        QuizDataAccessInterface, OpenGameDataAccessInterface, InventoryAddItemUserDataAccessInterface {
+        QuizDataAccessInterface, OpenGameDataAccessInterface, InventoryAddItemUserDataAccessInterface, InventoryUseItemUserDataAccessInterface {
 
     private AdventureGame game;
     private final FileDataAccess fileDataAccess;
@@ -48,9 +49,10 @@ public class FileGameDataAccessObject implements MoveGameDataAccessInterface,
         Location loc0 = new Location("Bahen Centre for Information Technology", 43.6594, -79.3981, null, null);
         Location loc1 = new Location("Myhal Centre For Engineering Innovation & Entrepreneurship", 43.6606, -79.3966, new Monster(api), null);
         Location loc2 = new Location("Regis College", 43.6643, -79.3901, null, new Item("heal", "heal"));
-        Location loc3 = new Location("Gerstein Science Information Centre", 43.6624, -79.3940, null, null);
+        Location loc3 = new Location("Regis College", 43.6643, -79.3901, null, new Item("Amulet of Health", "heal"));
+        Location loc4 = new Location("Gerstein Science Information Centre", 43.6624, -79.3940, null, null);
 
-        List<Location> locations = Arrays.asList(loc0, loc2, loc1, loc3);
+        List<Location> locations = Arrays.asList(loc0, loc2, loc3, loc1, loc4);
 
         GameMap gameMap = new GameMap(locations, 0);
         this.game = new AdventureGame(user, gameMap);
@@ -99,18 +101,6 @@ public class FileGameDataAccessObject implements MoveGameDataAccessInterface,
         startNewGame();
     }
 
-    private void copyUserFields(User source, User target) {
-        try {
-            for (Field field : User.class.getDeclaredFields()) {
-                field.setAccessible(true);
-                Object value = field.get(source);
-                field.set(target, value);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     // ==================== QuizUserDataAccessInterface ====================
     @Override
     public Quiz findById(int quizId) {
@@ -135,8 +125,48 @@ public class FileGameDataAccessObject implements MoveGameDataAccessInterface,
         return file.exists() && file.length() > 0;
     }
 
+    // ============== UseItemDataAccess Interface ===============
     @Override
-    public void deleteSaveFile() {
-        clearGameData();
+    public Inventory getInventory() {
+        User user = game.getUser();
+        return user != null ? user.getInventory() : null;
     }
+
+    @Override
+    public void removeItem(Item item) {
+        User user = game.getUser();
+        if (user != null && user.getInventory() != null) {
+            user.getInventory().removeItem(item);
+//            saveGame(game);
+        }
+    }
+
+    @Override
+    public Item getItemByName(String itemName) {
+        User user = game.getUser();
+        if (user == null || user.getInventory() == null) {
+            return null;
+        }
+
+        List<Item> items = user.getInventory().getItems();
+        if (items == null) {
+            return null;
+        }
+
+        for (Item item : items) {
+            if (item.getName().equals(itemName)) {
+                return item; } }
+        return null; }
+
+    @Override
+    public void updateUserStats(int hpIncrease, int defIncrease, int dmgIncrease) {
+        User user = game.getUser();
+        if (user != null) {
+            user.addBonusHP(hpIncrease);
+            user.addDEF(defIncrease);
+            user.addDMG(dmgIncrease);
+//            saveGame(game);
+        }
+    }
+
 }

@@ -2,7 +2,7 @@ package view;
 
 import entity.Direction;
 import entity.Item;
-import interface_adapter.InventoryAddItem.InventoryAddItemController;
+import interface_adapter.inventory_addItem.InventoryAddItemController;
 import interface_adapter.move.MoveController;
 import interface_adapter.move.MoveState;
 import interface_adapter.move.MoveViewModel;
@@ -73,13 +73,17 @@ public class MoveView extends JPanel implements PropertyChangeListener {
         this.add(currentLocationLabel);
         this.add(buttonPanel);
 
-        goLeftButton.addActionListener(
-                e -> moveController.execute(Direction.LEFT)
-        );
+        goLeftButton.addActionListener(e -> {
+            MoveState state = moveViewModel.getState();
+            state.setJustReturnedFromDefeat(false);
+            moveController.execute(Direction.LEFT);
+        });
 
-        goRightButton.addActionListener(
-                e -> moveController.execute(Direction.RIGHT)
-        );
+        goRightButton.addActionListener(e -> {
+            MoveState state = moveViewModel.getState();
+            state.setJustReturnedFromDefeat(false);
+            moveController.execute(Direction.RIGHT);
+        });
 
         pickUpButton.addActionListener(
                 e -> {
@@ -113,7 +117,12 @@ public class MoveView extends JPanel implements PropertyChangeListener {
             }
 
             linearMapLabel.setText(state.getLinearMap());
-            staticMapImageLabel.setIcon(state.getStaticMapImage());
+
+            byte[] imageData = state.getStaticMapImageData();
+            if (imageData != null) {
+                staticMapImageLabel.setIcon(new ImageIcon(imageData));
+            }
+
             currentLocationLabel.setText("Current Location: " + state.getCurrentLocationName());
 
             goLeftButton.setEnabled(state.isLeftButtonEnabled());
@@ -122,11 +131,12 @@ public class MoveView extends JPanel implements PropertyChangeListener {
             // Show End Game button only when at the last location
             endGameButton.setVisible(!state.isRightButtonEnabled());
 
-            // TODO
             if (state.getMonster() != null && state.getMonster().isAlive()) {
-                moveController.switchToBattleView(state.getMonster());
-
-//                state.setMonster(null);
+                if (state.isJustReturnedFromDefeat()) {
+                    state.setJustReturnedFromDefeat(false);
+                } else {
+                    moveController.switchToBattleView(state.getMonster());
+                }
             }
 
             pickUpButton.setVisible(state.isItemPickupable());
